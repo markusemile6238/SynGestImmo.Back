@@ -1,0 +1,10 @@
+﻿CREATE TABLE PasswordResets (
+        [Id] UNIQUEIDENTIFIER  DEFAULT NEWID(),
+        [Email] NVARCHAR(150) NOT NULL,
+        [Code] NVARCHAR(100) NOT NULL,
+        [CreatedAt] DATETIME2 DEFAULT GETDATE(),
+        [ExpiresAt] DATETIME2 DEFAULT DATEADD(HOUR, 1, GETDATE()),
+        [IsUsed] BIT DEFAULT 0
+		--CONSTRAINT
+		CONSTRAINT [PK_PasswordResets] PRIMARY KEY (Id)
+    );
