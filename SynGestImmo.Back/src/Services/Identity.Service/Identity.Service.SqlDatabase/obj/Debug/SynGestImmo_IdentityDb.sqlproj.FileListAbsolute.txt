@@ -1,0 +1,6 @@
+C:\projet final\SynGestImmo.Back\SynGestImmo.Back\src\Services\Identity.Service\Identity.Service.SqlDatabase\bin\Debug\SynGestImmo_IdentityDb.dacpac
+C:\projet final\SynGestImmo.Back\SynGestImmo.Back\src\Services\Identity.Service\Identity.Service.SqlDatabase\bin\Debug\SynGestImmo_IdentityDb.dll
+C:\projet final\SynGestImmo.Back\SynGestImmo.Back\src\Services\Identity.Service\Identity.Service.SqlDatabase\bin\Debug\SynGestImmo_IdentityDb.pdb
+C:\projet final\SynGestImmo.Back\SynGestImmo.Back\src\Services\Identity.Service\Identity.Service.SqlDatabase\obj\Debug\SynGestImmo_IdentityDb.sqlproj.AssemblyReference.cache
+C:\projet final\SynGestImmo.Back\SynGestImmo.Back\src\Services\Identity.Service\Identity.Service.SqlDatabase\obj\Debug\SynGestImmo_IdentityDb.dll
+C:\projet final\SynGestImmo.Back\SynGestImmo.Back\src\Services\Identity.Service\Identity.Service.SqlDatabase\obj\Debug\SynGestImmo_IdentityDb.pdb

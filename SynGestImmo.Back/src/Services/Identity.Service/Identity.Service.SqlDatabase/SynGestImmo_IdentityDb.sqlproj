@@ -71,8 +71,12 @@
     <Build Include="Entities\AuditLogs.sql" />
     <Build Include="Procedures\Procedure1.sql" />
     <Build Include="Views\RolesList.sql" />
+    <Build Include="Entities\Permissions.sql" />
+    <Build Include="Entities\RolePermissions.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Data\InsertRoles.sql" />
+    <None Include="Data\InsertPermissions.sql" />
+    <None Include="Data\AssignPermission.sql" />
   </ItemGroup>
 </Project>

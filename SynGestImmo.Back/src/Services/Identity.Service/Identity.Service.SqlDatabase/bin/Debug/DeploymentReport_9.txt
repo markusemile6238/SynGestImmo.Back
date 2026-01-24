@@ -1,0 +1,29 @@
+﻿** Met en surbrillance
+     Tables qui seront recréées avec les données migrées
+       [dbo].[Roles]
+     Index ordonnés en clusters à supprimer
+       Aucun
+     Index ordonnés en clusters à créer.
+       Aucun
+     Problèmes de données possibles
+       Aucun
+
+** Actions de l'utilisateur
+     Supprimer
+       contrainte sans nom sur [dbo].[Roles] (Contrainte par défaut)
+       contrainte sans nom sur [dbo].[Roles] (Contrainte par défaut)
+       contrainte sans nom sur [dbo].[Roles] (Contrainte par défaut)
+     Recréer la table
+       [dbo].[Roles] (Table)
+
+** Actions de support
+     Supprimer
+       [dbo].[FK_RolePermissions_Roles] (Clé étrangère)
+       [dbo].[FK_UserRoles_RoleId_Role.Id] (Clé étrangère)
+       [dbo].[FK_Users_MainRoleId_Roles.Id] (Clé étrangère)
+     Créer
+       [dbo].[FK_RolePermissions_Roles] (Clé étrangère)
+       [dbo].[FK_UserRoles_RoleId_Role.Id] (Clé étrangère)
+       [dbo].[FK_Users_MainRoleId_Roles.Id] (Clé étrangère)
+     Actualiser
+       [dbo].[RolesList] (Vue)
