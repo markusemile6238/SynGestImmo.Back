@@ -6,9 +6,10 @@ using System.Text;
 using System.Threading.Tasks;
 using Tools.Result;
 
-namespace Identity.Service.Infrastructure.Data.Repositories
+
+namespace Identity.Service.Domain.Repositories.RoleRepositories
 {
-    public interface IRolesRepository
+    public interface IRolesCommandRepository
     {
         // commands
 
@@ -19,9 +20,7 @@ namespace Identity.Service.Infrastructure.Data.Repositories
         Task<CqsResult> RemoveRoleFromeUserAsync(Guid assignedBy,Guid assignedAt, int role);
 
         
-        //queries
-        CqsResult<IEnumerable<Role>> GetAllRoleAsync();
-        CqsResult<Role?> GetRoleById(int id);
+
 
 
     }

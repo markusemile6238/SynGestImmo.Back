@@ -1,35 +1,51 @@
 {
   "version": 3,
   "targets": {
-    "net9.0": {}
+    "net9.0": {
+      "Tools/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v9.0",
+        "compile": {
+          "bin/placeholder/Tools.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Tools.dll": {}
+        }
+      }
+    }
   },
-  "libraries": {},
+  "libraries": {
+    "Tools/1.0.0": {
+      "type": "project",
+      "path": "../../Tools/Tools.csproj",
+      "msbuildProject": "../../Tools/Tools.csproj"
+    }
+  },
   "projectFileDependencyGroups": {
-    "net9.0": []
+    "net9.0": [
+      "Tools >= 1.0.0"
+    ]
   },
   "packageFolders": {
-    "C:\\Users\\e.markus\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {},
-    "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\": {}
+    "C:\\Users\\Papa\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\projet final\\SynGestImmo.Back\\SynGestImmo.Back\\src\\Services\\Identity.Service\\Identity.Service.Domain\\Identity.Service.Domain.csproj",
+      "projectUniqueName": "C:\\formations\\technofutur\\PROJET FIN\\SynGestImmo\\SynGestImmo.Back\\SynGestImmo.Back\\src\\Services\\Identity.Service\\Identity.Service.Domain\\Identity.Service.Domain.csproj",
       "projectName": "Identity.Service.Domain",
-      "projectPath": "C:\\projet final\\SynGestImmo.Back\\SynGestImmo.Back\\src\\Services\\Identity.Service\\Identity.Service.Domain\\Identity.Service.Domain.csproj",
-      "packagesPath": "C:\\Users\\e.markus\\.nuget\\packages\\",
-      "outputPath": "C:\\projet final\\SynGestImmo.Back\\SynGestImmo.Back\\src\\Services\\Identity.Service\\Identity.Service.Domain\\obj\\",
+      "projectPath": "C:\\formations\\technofutur\\PROJET FIN\\SynGestImmo\\SynGestImmo.Back\\SynGestImmo.Back\\src\\Services\\Identity.Service\\Identity.Service.Domain\\Identity.Service.Domain.csproj",
+      "packagesPath": "C:\\Users\\Papa\\.nuget\\packages\\",
+      "outputPath": "C:\\formations\\technofutur\\PROJET FIN\\SynGestImmo\\SynGestImmo.Back\\SynGestImmo.Back\\src\\Services\\Identity.Service\\Identity.Service.Domain\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
-        "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\"
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\e.markus\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Papa\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net9.0"
@@ -42,7 +58,11 @@
       "frameworks": {
         "net9.0": {
           "targetAlias": "net9.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "C:\\formations\\technofutur\\PROJET FIN\\SynGestImmo\\SynGestImmo.Back\\SynGestImmo.Back\\src\\Services\\Tools\\Tools.csproj": {
+              "projectPath": "C:\\formations\\technofutur\\PROJET FIN\\SynGestImmo\\SynGestImmo.Back\\SynGestImmo.Back\\src\\Services\\Tools\\Tools.csproj"
+            }
+          }
         }
       },
       "warningProperties": {
@@ -76,7 +96,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.309/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.310/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Identity.Service.Domain.Exceptions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -48,14 +50,18 @@ namespace Tools.Result
         public bool IsSuccess { get; }
         public bool IsFailure => !IsSuccess;
         public string? ErrorMessage { get; }
-
+        public string? ErrorCode { get; }
+        public int? StatusCode { get; }
         public TResult Data { get; }
 
-        public CqsResult(bool isSuccess,TResult data, string? errorMessage=null)
+
+        public CqsResult(bool isSuccess, TResult data,string? errorMessage=null, string? errorCode=null, int? statusCode=null)
         {
             IsSuccess = isSuccess;
-            ErrorMessage = errorMessage;
             Data = data;
+            ErrorMessage = errorMessage;
+            ErrorCode = errorCode;
+            StatusCode = statusCode;
         }
 
         public static CqsResult<TResult> Success(TResult data)
@@ -69,14 +75,21 @@ namespace Tools.Result
             return new CqsResult<TResult>(false, default!,ErrorMessage);
         }
 
-        public static implicit operator CqsResult<TResult>(Error error)
-        {
-            return Failure(error.ErrorMessage);
+        public static CqsResult<TResult> Failure(Error error) 
+        { 
+            if(error == null) throw new ArgumentNullException("Failure method nead and Error parameters");
+            return new CqsResult<TResult>(false,default!,error.ErrorMessage,error.ErrorCode,error.StatusCode);
         }
 
-        public static implicit operator CqsResult<TResult>(Exception ex)
+        public static implicit operator CqsResult<TResult>(Error error)
         {
-            return Failure(ex.Message);
+            if(error == null) throw new ArgumentNullException("Failure method nead and Error parameters");
+            return Failure(error);
+        }
+
+        public static implicit operator CqsResult<TResult>(IdentityServiceException ex)
+        {
+            return new CqsResult<TResult>(false, default!, ex.Message, ex.ErrorCode, ex.StatusCode);
         }
 
     }

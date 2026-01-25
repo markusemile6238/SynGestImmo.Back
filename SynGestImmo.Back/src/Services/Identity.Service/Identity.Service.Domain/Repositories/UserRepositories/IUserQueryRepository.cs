@@ -15,7 +15,7 @@ namespace Identity.Service.Infrastructure.Data.Repositories.UserRepositories
         Task<CqsResult<IEnumerable<User>>> SearchUsersAsync(string searchTerm, int limit = 50);
         Task<CqsResult<bool>> ExistsByEmailAsync(string email);
         Task<CqsResult<bool>> ExistsByUserRefAsync(string userRef);
-
+   
 
 
     }
