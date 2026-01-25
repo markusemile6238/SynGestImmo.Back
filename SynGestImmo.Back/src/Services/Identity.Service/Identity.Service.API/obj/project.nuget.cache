@@ -1,11 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "V5SU8JTUOVQ=",
+  "dgSpecHash": "/dmFNR91gnE=",
   "success": true,
-  "projectFilePath": "C:\\projet final\\SynGestImmo.Back\\SynGestImmo.Back\\src\\Services\\Identity.Service\\Identity.Service.API\\Identity.Service.API.csproj",
+  "projectFilePath": "C:\\formations\\technofutur\\PROJET FIN\\SynGestImmo\\SynGestImmo.Back\\SynGestImmo.Back\\src\\Services\\Identity.Service\\Identity.Service.API\\Identity.Service.API.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\e.markus\\.nuget\\packages\\microsoft.aspnetcore.openapi\\9.0.10\\microsoft.aspnetcore.openapi.9.0.10.nupkg.sha512",
-    "C:\\Users\\e.markus\\.nuget\\packages\\microsoft.openapi\\1.6.17\\microsoft.openapi.1.6.17.nupkg.sha512"
+    "C:\\Users\\Papa\\.nuget\\packages\\microsoft.aspnetcore.openapi\\9.0.10\\microsoft.aspnetcore.openapi.9.0.10.nupkg.sha512",
+    "C:\\Users\\Papa\\.nuget\\packages\\microsoft.openapi\\1.6.17\\microsoft.openapi.1.6.17.nupkg.sha512"
   ],
   "logs": []
 }

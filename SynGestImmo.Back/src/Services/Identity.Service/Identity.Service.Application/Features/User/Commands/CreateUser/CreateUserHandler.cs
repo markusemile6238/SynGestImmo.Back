@@ -4,7 +4,7 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using Tools.Result;
 
-namespace Identity.Service.Application.Features.User.CreateUser
+namespace Identity.Service.Application.Features.User.Commands.CreateUser
 {
     public class CreateUserHandler : IRequestHandler<CreateUserCommand, CqsResult>
     {
@@ -21,8 +21,8 @@ namespace Identity.Service.Application.Features.User.CreateUser
         public async Task<CqsResult> Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
             // validations
-            if (String.IsNullOrEmpty(request.Email)) return CqsResult.Failure("Email is require");
-            if (String.IsNullOrEmpty(request.Password)) return CqsResult.Failure("Password is require");
+            if (string.IsNullOrEmpty(request.Email)) return CqsResult.Failure("Email is require");
+            if (string.IsNullOrEmpty(request.Password)) return CqsResult.Failure("Password is require");
             if (request.RoleId == 0) return CqsResult.Failure("Role ID is required");
 
             // check role existence

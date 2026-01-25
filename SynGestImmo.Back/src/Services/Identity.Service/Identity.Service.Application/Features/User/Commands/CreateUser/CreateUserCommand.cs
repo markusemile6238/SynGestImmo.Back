@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using Tools.Result;
-namespace Identity.Service.Application.Features.User.CreateUser
+namespace Identity.Service.Application.Features.User.Commands.CreateUser
 {
     public class CreateUserCommand : IRequest<CqsResult>
     {
