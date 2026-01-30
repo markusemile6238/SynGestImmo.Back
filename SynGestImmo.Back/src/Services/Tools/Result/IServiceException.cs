@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Identity.Service.Infrastructure.Validators
+namespace Tools.Result
 {
-    public class RoleFieldsValidator
+    public interface IServiceException 
     {
+        int StatusCode { get; }
+        string? ErrorCode { get; }
     }
 }

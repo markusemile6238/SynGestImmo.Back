@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tools", "SynGestImmo.Back\s
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SynGestImmo_IdentityDb", "SynGestImmo.Back\src\Services\Identity.Service\Identity.Service.SqlDatabase\SynGestImmo_IdentityDb.sqlproj", "{FDDAF524-6474-4E32-9CBF-8579FAA32828}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Middlewares", "Middlewares", "{269225D2-FF81-47F1-9FF4-3AD22ADF11CB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -122,6 +124,7 @@ Global
 		{6322BDF5-0649-2743-81F8-9661FE52007D} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{C52BA02C-0031-40E6-820B-2C5C814F627E} = {984BB9B3-3FA3-BE33-9484-CAC21695A33C}
 		{FDDAF524-6474-4E32-9CBF-8579FAA32828} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{269225D2-FF81-47F1-9FF4-3AD22ADF11CB} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2F104AF8-5D47-47ED-ACA6-140516A743E2}

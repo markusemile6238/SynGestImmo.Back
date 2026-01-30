@@ -1,7 +1,7 @@
 ﻿using Identity.Service.Domain.Entities;
+using Identity.Service.Domain.Exceptions;
 using Identity.Service.Domain.Repositories.RoleRepositories;
 using Identity.Service.Infrastructure.Handlers;
-using Identity.Service.Infrastructure.Validators;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Logging;
 using Tools.Result;
@@ -14,75 +14,68 @@ namespace Identity.Service.Infrastructure.Data.Repositories
         private readonly IDapperConnection _connection;
         private readonly ILogger<RoleRepository> _logger;
         private readonly SqlExceptionsHandler _sqlHandler;
-        private readonly RoleFieldsValidator _roleValidator;
 
-        public RoleRepository(IDapperConnection connection, ILogger<RoleRepository> logger, SqlExceptionsHandler exceptionsHandler, RoleFieldsValidator roleValidator)
+
+        public RoleRepository(IDapperConnection connection, ILogger<RoleRepository> logger, SqlExceptionsHandler exceptionsHandler)
         {
             _connection = connection;
             _logger = logger;
             _sqlHandler = exceptionsHandler;
-            _roleValidator = roleValidator;
+
         }
 
-        public Task<CqsResult> AssignRoleToUserAsync(Guid assignedBy, Guid assignedAt, int role)
+        public Task AssignRoleToUserAsync(Guid assignedBy, Guid assignedAt, int role)
         {
             throw new NotImplementedException();
         }
 
-        public Task<CqsResult> CreateRoleAsync(Role role)
+        public Task CreateRoleAsync(Role role)
         {
             throw new NotImplementedException();
         }
 
-        public Task<CqsResult> DeleteRoleAsync(int id)
+        public Task DeleteRoleAsync(int id)
         {
             throw new NotImplementedException();
         }
 
-        public CqsResult<IEnumerable<Role>> GetAllRoleAsync()
+        public Task<IEnumerable<Role>> GetAllRoleAsync()
         {
             throw new NotImplementedException();
         }
 
-        public Task<CqsResult<Role?>> GetRoleByIdAsync(int id)
+        #region GetRoleByIdAsynch
+        public async Task<Role?> GetRoleByIdAsync(int id)
         {
 
-            throw new NotImplementedException();
-        }
+            using var connection = await _connection.CreateConnectionAsync();
+
+            var sql = @"SELECT Id,Name,Description,IsSystemRole,IsActive,Prefixe,CreatedAt,UpdatedAt FROM Roles WHERE Id=@Id AND IsActive=1";
+
+            var role = await connection.QueryFirstOrDefaultAsync<Role>(sql, new { id });
+
+            return role;
+        } 
+        #endregion
 
         #region IsRoleExistAsync
-        public async Task<CqsResult<bool>> IsRoleExistAsync(int id)
+        public async Task<bool> IsRoleExistAsync(int id)
         {
-            try
-            {
-
-                using var connection = await _connection.CreateConnectionAsync();
-                var sql = @"SELECT COUNT(1) FROM Roles WHERE Id = @Id";
-                var count = await connection.ExecuteScalarAsync<int>(sql, new { id });
-                return CqsResult<bool>.Success(count > 0);
-
-            }
-            catch (SqlException ex)
-            {
-                _logger.LogError($"Sql Error : {ex.Message}\n Sql Code Number {ex.Number}");
-                return _sqlHandler.Handle(ex);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Unexpected Error : Unable to verify role existence: {ex.Message}");
-                return Error.Database("Unable to verify role existence");
-            }
+            using var connection = await _connection.CreateConnectionAsync();
+            var sql = @"SELECT COUNT(1) FROM Roles WHERE Id = @Id";
+            var count = await connection.ExecuteScalarAsync<int>(sql, new { id });
+            return count > 0;
 
         }
 
         #endregion
 
-        public Task<CqsResult> RemoveRoleFromeUserAsync(Guid assignedBy, Guid assignedAt, int role)
+        public Task RemoveRoleFromeUserAsync(Guid assignedBy, Guid assignedAt, int role)
         {
             throw new NotImplementedException();
         }
 
-        public Task<CqsResult> UpdateRoleAsync(int id, Role role)
+        public Task UpdateRoleAsync(int id, Role role)
         {
             throw new NotImplementedException();
         }

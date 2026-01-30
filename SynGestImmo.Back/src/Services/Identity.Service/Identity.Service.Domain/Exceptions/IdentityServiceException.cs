@@ -3,15 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Tools.Result;
 
 namespace Identity.Service.Domain.Exceptions
 {
 
 
-    public class IdentityServiceException : Exception
+    public class IdentityServiceException : Exception, IServiceException
     {
         public string ErrorCode { get; } = String.Empty;
-        public int StatusCode { get; } 
+        public int StatusCode { get; } = 400;
+
+
 
         public IdentityServiceException()
         {

@@ -1,23 +1,24 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using Identity.Service.Application.Common;
+using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Logging;
 using System.Data.SqlTypes;
 using Tools.Result;
 
 namespace Identity.Service.Infrastructure.Handlers
 {
-    public  class SqlExceptionsHandler
+    public class SqlExceptionsHandler : ISqlExceptionTranslator
     {
-    
+
 
         private readonly ILogger<SqlExceptionsHandler> _logger;
 
-        internal SqlExceptionsHandler(ILogger<SqlExceptionsHandler> logger)
+        public SqlExceptionsHandler(ILogger<SqlExceptionsHandler> logger)
         {
             _logger = logger;
         }
 
 
-        public  Error Handle(SqlException ex)
+        public CqsError Translate(SqlException ex)
         {
             _logger.LogError($"Erreur SQL: {ex.Number} \n {ex.Message}");
 
@@ -49,6 +50,7 @@ namespace Identity.Service.Infrastructure.Handlers
                     return Error.Database("Database error");
             }
         }
-    }
 
+    }
 }
+

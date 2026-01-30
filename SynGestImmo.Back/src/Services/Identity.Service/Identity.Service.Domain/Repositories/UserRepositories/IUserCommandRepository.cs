@@ -1,4 +1,5 @@
 ﻿using Identity.Service.Domaine.Entities;
+using System.Data;
 using Tools.Result;
 
 namespace Identity.Service.Infrastructure.Data.Repositories.UserRepositories
@@ -6,13 +7,13 @@ namespace Identity.Service.Infrastructure.Data.Repositories.UserRepositories
     public interface IUserCommandRepository
     {
         //Commands
-        Task<CqsResult> CreateUserAsync(User user);
-        Task<CqsResult> UpdateUserAsync(User user);
-        Task<CqsResult> DeleteUserAsync(User user);
-        Task<CqsResult> AssignRoleIdAsync(User user);
-        Task<CqsResult> UpdateRefreshTokenAsync(Guid userId, string? refreshToken, DateTime? expiry);
-        Task<CqsResult> DeactivateUserAsync(Guid userId);
-        Task<CqsResult> ActivateUserAsync(Guid userId);
+        Task<Guid> CreateUserAsync(User user, IDbConnection connection, IDbTransaction transaction);
+        Task<bool> UpdateUserAsync(User user);
+        Task<bool> DeleteUserAsync(Guid id);
+        Task<bool> AssignRoleIdAsync(int id, Guid userId);
+        Task<bool> UpdateRefreshTokenAsync(Guid userId, string? refreshToken, DateTime? expiry);
+        Task<bool> DeactivateUserAsync(Guid userId);
+        Task<bool> ActivateUserAsync(Guid userId);
 
     }
 }

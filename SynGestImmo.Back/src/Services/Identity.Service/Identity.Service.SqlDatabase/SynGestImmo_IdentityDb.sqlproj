@@ -73,6 +73,7 @@
     <Build Include="Views\RolesList.sql" />
     <Build Include="Entities\Permissions.sql" />
     <Build Include="Entities\RolePermissions.sql" />
+    <Build Include="Entities\RefreshTokens.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Data\InsertRoles.sql" />

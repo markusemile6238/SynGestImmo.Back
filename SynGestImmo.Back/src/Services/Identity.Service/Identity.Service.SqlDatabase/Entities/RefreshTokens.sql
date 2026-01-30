@@ -1,0 +1,13 @@
+﻿CREATE TABLE [dbo].[RefreshTokens]
+(
+	 Id UNIQUEIDENTIFIER PRIMARY KEY,
+    UserId UNIQUEIDENTIFIER NOT NULL,
+    TokenHash NVARCHAR(256) NOT NULL,
+    ExpiresAt DATETIME2 NOT NULL,
+    IsRevoked BIT NOT NULL,
+    CreatedAt DATETIME2 NOT NULL,
+    RevokedAt DATETIME2 NULL,
+
+    CONSTRAINT FK_RefreshTokens_User
+        FOREIGN KEY (UserId) REFERENCES Users(Id)
+)

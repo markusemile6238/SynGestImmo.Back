@@ -13,11 +13,11 @@ namespace Identity.Service.Domain.Repositories.RoleRepositories
     {
         // commands
 
-        Task<CqsResult> CreateRoleAsync(Role role);
-        Task<CqsResult> UpdateRoleAsync(int id, Role role);
-        Task<CqsResult> DeleteRoleAsync(int id);
-        Task<CqsResult> AssignRoleToUserAsync(Guid assignedBy,Guid assignedAt, int role);
-        Task<CqsResult> RemoveRoleFromeUserAsync(Guid assignedBy,Guid assignedAt, int role);
+        Task CreateRoleAsync(Role role);
+        Task UpdateRoleAsync(int id, Role role);
+        Task DeleteRoleAsync(int id);
+        Task AssignRoleToUserAsync(Guid assignedBy,Guid assignedAt, int role);
+        Task RemoveRoleFromeUserAsync(Guid assignedBy,Guid assignedAt, int role);
 
         
 

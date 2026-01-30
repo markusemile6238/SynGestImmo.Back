@@ -4,8 +4,6 @@
         [PasswordHash] NVARCHAR(255) NOT NULL,
         [UserRef] NVARCHAR(50) UNIQUE NOT NULL,
 		[EntityId] UNIQUEIDENTIFIER NULL,
-        [RefreshToken] NVARCHAR(255) NULL,
-        [RefreshTokenExpiry] DATETIME2 NULL,
         [MainRoleId] int NULL , -- role Principal
         [IsActive] BIT DEFAULT 1,
         [CreatedAt] DATETIME2 DEFAULT GETDATE(),

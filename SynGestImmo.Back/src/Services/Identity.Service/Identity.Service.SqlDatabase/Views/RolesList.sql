@@ -7,6 +7,5 @@ LEFT JOIN UserRoles ur ON u.Id = ur.UserId
 LEFT JOIN Roles r ON ur.RoleId = r.Id
 LEFT JOIN Roles r_main ON u.MainRoleId = r_main.Id
 GROUP BY u.Id, u.Email, u.PasswordHash, u.UserRef, u.EntityId, 
-         u.RefreshToken, u.RefreshTokenExpiry, u.MainRoleId, 
-         u.IsActive, u.CreatedAt, u.UpdatedAt, r_main.Name
+          u.MainRoleId, u.IsActive, u.CreatedAt, u.UpdatedAt, r_main.Name
 GO

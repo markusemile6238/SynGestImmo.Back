@@ -7,14 +7,15 @@ namespace Identity.Service.Infrastructure.Data.Repositories.UserRepositories
     public interface IUserQueryRepository
     {
         //Queries
-        Task<CqsResult<User>> GetUserByIdAsync(Guid id);
-        Task<CqsResult<User>> GetUserByEmailAsync(string email);
-        Task<CqsResult<User>> GetUserByUserRefAsync(string userRef);
-        Task<CqsResult<User>> GetUserByEntityIdAsync(Guid entityId);
-        Task<CqsResult<User>> GetUserByRefreshTokenAsync(string refreshToken);
-        Task<CqsResult<IEnumerable<User>>> SearchUsersAsync(string searchTerm, int limit = 50);
-        Task<CqsResult<bool>> ExistsByEmailAsync(string email);
-        Task<CqsResult<bool>> ExistsByUserRefAsync(string userRef);
+        Task<IEnumerable<User>> GetAllUserAsync();
+        Task<User?> GetUserByIdAsync(Guid id);
+        Task<User?> GetUserByEmailAsync(string email);
+        Task<User?> GetUserByUserRefAsync(string userRef);
+        Task<User?> GetUserByEntityIdAsync(Guid entityId);
+        Task<User?> GetUserByRefreshTokenAsync(string refreshToken);
+        Task<IEnumerable<User>> SearchUsersAsync(string searchTerm, int limit = 50);
+        Task<bool> ExistsByEmailAsync(string email);
+        Task<bool> ExistsByUserRefAsync(string userRef);
    
 
 

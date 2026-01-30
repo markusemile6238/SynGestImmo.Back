@@ -1,129 +1,115 @@
-﻿using Identity.Service.Domaine.Entities;
+﻿using Identity.Service.Domain.Exceptions;
+using Identity.Service.Domaine.Entities;
+using Identity.Service.Infrastructure.Data.Repositories.UserRepositories;
 using Identity.Service.Infrastructure.Handlers;
-using Identity.Service.Infrastructure.Validators;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Logging;
+using System.Data;
+using System.Web.Helpers;
 using Tools.Result;
-
-using Identity.Service.Infrastructure.Data.Repositories.UserRepositories;
 
 namespace Identity.Service.Infrastructure.Data.Repositories
 {
     public class UserRepository : IUserCommandRepository, IUserQueryRepository
     {
         private readonly IDapperConnection _connection;
-        private readonly SqlExceptionsHandler _sqlHandler;
-        private readonly UserFieldsValidator _userValidator;
         private readonly ILogger<UserRepository> _logger;
 
         public UserRepository(
             IDapperConnection connectionDapper,
-            ILogger<UserRepository> logger,
-            SqlExceptionsHandler sqlHandler
+            ILogger<UserRepository> logger
             )
         {
             _connection = connectionDapper;
-            _sqlHandler = sqlHandler;
             _logger = logger;
         }
 
-        public Task<CqsResult> ActivateUserAsync(Guid userId)
+        public Task<bool> ActivateUserAsync(Guid userId)
         {
             throw new NotImplementedException();
         }
 
-        public Task<CqsResult> AssignRoleIdAsync(User user)
-        {
-            throw new NotImplementedException();
-        }
+
         #region CreateUserAsync
-
-        public async Task<CqsResult> CreateUserAsync(User user)
+        public async Task<Guid> CreateUserAsync(User user, IDbConnection connection, IDbTransaction transaction)
         {
-            // validation user
-            var validationUser = _userValidator.IsValid(user);
-            if (validationUser.IsFailure) return validationUser;
 
-            // check if email already exist
-            var emailExist = await ExistsByEmailAsync(user.Email);
-            if (emailExist.IsSuccess) return Error.Conflit("Email already exist.");
+            user.Id = Guid.NewGuid(); // creation officel de l'id
+            //using var connection = await _connection.CreateConnectionAsync();
 
-            // check is userRef already exist
-            var userRefExist = await ExistsByUserRefAsync(user.UserRef);
-            if (userRefExist.IsSuccess) return Error.Conflit("User ref already exist.");
-
-            // check if EntityId exist
+            const string sql = @"
+                INSERT INTO Users (Id, Email, PasswordHash, UserRef, EntityId, MainRoleId, IsActive, CreatedAt)            
+                VALUES (@Id, @Email, @PasswordHash, @UserRef, @EntityId, @MainRoleId, @IsActive, @CreatedAt)
+                ;";
 
 
-            try
-            {
+            int rowAffected = await connection.ExecuteAsync(sql, user, transaction);
+
+
+            //await AssignRoleIdAsync(user.MainRoleId, newId);
+
+            if (rowAffected != 1)
+                throw new IdentityServiceException("Insert user Failed");
+
+            return user.Id;
+
+        }
+
+        #endregion
+    
+        #region AssignRolesToUserAsynch
+
+        public async Task<bool> AssignRoleIdAsync(int roleId, Guid userId)
+        {
 
                 using var connection = await _connection.CreateConnectionAsync();
-
                 const string sql = @"
-            INSERT INTO Users (Email, PasswordHash, UserRef, EntityId, MainRoleId, IsActive, CreatedAt)
-            VALUES (@Email, @PasswordHash, @UserRef, @EntityId, @MainRoleId, @IsActive, @CreatedAt)";
+                    UPDATE Users 
+                    SET MainRoleId =  @roleId
+                    WHERE Id = @userId";
+                
+                var rowAffected = await connection.ExecuteAsync(sql, new 
+                { 
+                    roleId,
+                    userId 
+                });
 
+            return rowAffected > 0;
 
-            int newId = await connection.ExecuteScalarAsync<int>(sql, new
-            {
-                user.Email,
-                user.PasswordHash,
-                user.UserRef,
-                user.EntityId,
-                user.MainRoleId,
-                user.IsActive,
-                user.CreatedAt
-            });
-                return CqsResult.Success();
-            }
-            catch (SqlException ex)
-            {
-                _logger.LogError($"SQL ERROR : {ex.Message}\n SQL ERROR NUMBER:{ex.Number}");
-                return _sqlHandler.Handle(ex);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"UNEXPECTED ERROR : Unable to create a new user {ex.Message}");
-                return Error.Database("Unable to create a new user.");
-            }
         }
 
         #endregion
 
-        public Task<CqsResult> DeactivateUserAsync(Guid userId)
-        {
-            throw new NotImplementedException();
-        }
 
-        public Task<CqsResult> DeleteUserAsync(User user)
+        #region DesactivateUserAsync
+        public Task<bool> DeactivateUserAsync(Guid userId)
         {
             throw new NotImplementedException();
-        }
+        } 
+        #endregion
+
+        #region DeleteUserAsync
+        public async Task<bool> DeleteUserAsync(Guid id)
+        {
+            using var connection = await _connection.CreateConnectionAsync();
+            const string command = @"DELETE FROM Users WHERE Id=@Id";
+
+            var row = await connection.ExecuteAsync(command, new { Id = id });
+
+            return row > 0;
+
+        } 
+        #endregion
 
         #region ExistsByEmailAsync
 
-        public async Task<CqsResult<bool>> ExistsByEmailAsync(string email)
+        public async Task<bool> ExistsByEmailAsync(string email)
         {
-            if (email == null) throw new ArgumentNullException(nameof(email));
 
-            try
-            {
-                using var connection = await _connection.CreateConnectionAsync();
-                var sql = @"SELECT COUNT(1) FROM Users WHERE Email = @Email";
-                var count = await connection.ExecuteScalarAsync<int>(sql, new { email });
-                return CqsResult<bool>.Success(count > 0);
-            }
-            catch (SqlException ex)
-            {
-                _logger.LogError($"Sql Error : {ex.Message}\n Sql Code Number {ex.Number}");
-                return _sqlHandler.Handle(ex);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Unexpected Error : Unable to verify email existence : {ex.Message}");
-                return Error.Database("Unable to verify email existence");
-            }
+            using var connection = await _connection.CreateConnectionAsync();
+            var sql = @"SELECT COUNT(1) FROM Users WHERE Email = @Email";
+            var count = await connection.ExecuteScalarAsync<int>(sql, new { email });
+            return count > 0;
 
         }
 
@@ -131,68 +117,93 @@ namespace Identity.Service.Infrastructure.Data.Repositories
 
         #region ExistsByUserRefAsync
 
-        public async Task<CqsResult<bool>> ExistsByUserRefAsync(string userRef)
+        public async Task<bool> ExistsByUserRefAsync(string userRef)
         {
-            if (userRef == null) throw new ArgumentNullException(nameof(userRef));
-            try
-            {
-                using var connection = await _connection.CreateConnectionAsync();
-                var sql = @"SELECT COUNT(1) FROM Users WHERE UserRef = @UserRef";
-                var count = await connection.ExecuteScalarAsync<int>(sql, new { userRef });
-                return CqsResult<bool>.Success(count > 0);
-            }
-            catch (SqlException ex)
-            {
-                _logger.LogError($"Sql Error : {ex.Message}\n Sql Code Number {ex.Number}");
-                return _sqlHandler.Handle(ex);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Unexpected Error : Unable to verify user reference existence: {ex.Message}");
-                return Error.Database("Unable to verify user reference existence");
-            }
+
+            using var connection = await _connection.CreateConnectionAsync();
+            var sql = @"SELECT COUNT(1) FROM Users WHERE UserRef = @UserRef";
+            var user = await connection.ExecuteScalarAsync<int>(sql, new { userRef });
+            return user > 1;
+        }
+
+        public async Task<IEnumerable<User>> GetAllUserAsync()
+        {
+            var connection = await _connection.CreateConnectionAsync();
+            var query = @"
+                    SELECT Id, Email, UserRef, MainRoleId, IsActive, CreatedAt, UpdatedAt  
+                    FROM Users";
+            var users = await connection.QueryAsync<User>(query);
+            return users;
         }
 
         #endregion
 
-        public Task<CqsResult<User>> GetUserByEmailAsync(string email)
+        #region UpdateRefreshTokenAsync
+        public Task<bool> UpdateRefreshTokenAsync(Guid userId, string? refreshToken, DateTime? expiry)
         {
             throw new NotImplementedException();
         }
+        #endregion
 
-        public Task<CqsResult<User>> GetUserByEntityIdAsync(Guid entityId)
+        #region UpdateUserAsync
+        public Task<bool> UpdateUserAsync(User user)
         {
             throw new NotImplementedException();
-        }
+        } 
+        #endregion
 
-        public Task<CqsResult<User>> GetUserByIdAsync(Guid id)
-        {
-            throw new NotImplementedException();
-        }
 
-        public Task<CqsResult<User>> GetUserByRefreshTokenAsync(string refreshToken)
+        #region GetUserByEmailAsync
+        public async Task<User?> GetUserByEmailAsync(string email)
         {
-            throw new NotImplementedException();
+            var connection = await _connection.CreateConnectionAsync();
+            var query = @"SELECT TOP(1) * FROM Users WHERE Email = @Email";
+            var user = await connection.QueryFirstOrDefaultAsync<User>(query, new { Email = email });
+            return user;
         }
+        #endregion
 
-        public Task<CqsResult<User>> GetUserByUserRefAsync(string userRef)
+        #region GetUserByEntityIdAs
+        public async Task<User?> GetUserByEntityIdAsync(Guid entityId)
         {
-            throw new NotImplementedException();
-        }
+            var connection = await _connection.CreateConnectionAsync();
+            var query = @"SELECT TOP(1) * FROM Users WHERE EntityId = @EntityId";
+            var user = await connection.ExecuteScalarAsync<User?>(query, new { entityId });
+            return user;
+        } 
+        #endregion
 
-        public Task<CqsResult<IEnumerable<User>>> SearchUsersAsync(string searchTerm, int limit = 50)
+        #region GetUserById 
+        public async Task<User?> GetUserByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var connection = await _connection.CreateConnectionAsync();
+            var query = @"SELECT TOP(1) * FROM Users WHERE Id = @ID";
+            var user = await connection.ExecuteScalarAsync<User?>(query, new { id });
+            return user;
         }
+        #endregion
 
-        public Task<CqsResult> UpdateRefreshTokenAsync(Guid userId, string? refreshToken, DateTime? expiry)
+        #region GetUserByRefreshTokenAsync
+        public Task<User?> GetUserByRefreshTokenAsync(string refreshToken)
         {
             throw new NotImplementedException();
         }
+        #endregion
 
-        public Task<CqsResult> UpdateUserAsync(User user)
+        #region GetUserByUserRefAsync
+        public Task<User?> GetUserByUserRefAsync(string userRef)
         {
             throw new NotImplementedException();
         }
+        #endregion
+
+        #region SearchUsersAsyn
+        public Task<IEnumerable<User>> SearchUsersAsync(string searchTerm, int limit = 50)
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
+
+
     }
 }

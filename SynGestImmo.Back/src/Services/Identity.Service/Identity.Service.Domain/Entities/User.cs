@@ -10,13 +10,11 @@ namespace Identity.Service.Domaine.Entities
         public Guid Id { get; set; }
         public string Email { get; set; } = string.Empty;
         public string PasswordHash { get; set; } = string.Empty;
-        public string UserRef { get; set; } = string.Empty;
-        public Guid? EntityId { get; set; }
-        public string? RefreshToken { get; set; }
-        public DateTime? RefreshTokenExpiry { get; set; }
-        public int? MainRoleId { get; set; }
+        public string UserRef { get; set; } = string.Empty; // reference dans le context trace ecrite
+        public Guid EntityId { get; set; }
+        public int MainRoleId { get; set; }
         public bool IsActive { get; set; } = true;
         public DateTime CreatedAt { get; set; }
-        public DateTime UpdatedAt { get; set; }
+        public DateTime? UpdatedAt { get; set; }
     }
 }

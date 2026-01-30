@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Tools\Tools.csproj" />
+    <ProjectReference Include="..\Identity.Service.Application\Identity.Service.Application.csproj" />
     <ProjectReference Include="..\Identity.Service.Domain\Identity.Service.Domain.csproj" />
   </ItemGroup>
 

@@ -12,8 +12,9 @@ namespace Identity.Service.Domain.Repositories.RoleRepositories
     {
 
         //queries
-        Task<CqsResult<IEnumerable<Role>>> GetAllRoleAsync();
-        Task<CqsResult<Role>?> GetRoleByIdAsync(int id);
-        Task<CqsResult<bool>> IsRoleExistAsync(int id);
+        Task<IEnumerable<Role>> GetAllRoleAsync();
+        Task<Role?> GetRoleByIdAsync(int id);
+        Task<bool> IsRoleExistAsync(int id);
+
     }
 }
