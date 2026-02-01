@@ -177,8 +177,19 @@ namespace Identity.Service.Infrastructure.Data.Repositories
         public async Task<User?> GetUserByIdAsync(Guid id)
         {
             var connection = await _connection.CreateConnectionAsync();
-            var query = @"SELECT TOP(1) * FROM Users WHERE Id = @ID";
-            var user = await connection.ExecuteScalarAsync<User?>(query, new { id });
+            var query = @"
+            SELECT 
+                Id,
+                Email,
+                PasswordHash,
+                UserRef,
+                EntityId,
+                MainRoleId,
+                IsActive,
+                CreatedAt,
+                UpdatedAt
+            FROM Users WHERE Id = @ID";
+            var user = await connection.QueryFirstOrDefaultAsync<User>(query, new { id });
             return user;
         }
         #endregion

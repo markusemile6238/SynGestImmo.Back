@@ -23,11 +23,14 @@ namespace Identity.Service.Infrastructure.Data.Repositories
             _logger = logger;
         }
 
-        public async Task<bool> AssignRoleToUserAsync(Guid userId, int roleId,IDbConnection? connection = null, IDbTransaction? transaction = null)
+        #region COMMANDS
+
+
+        public async Task<bool> AssignRoleToUserAsync(Guid userId, int roleId, IDbConnection? connection = null, IDbTransaction? transaction = null)
         {
 
             bool createdNew = false;
-            if(connection == null)
+            if (connection == null)
             {
                 connection = await _connection.CreateConnectionAsync();
                 createdNew = true;
@@ -36,7 +39,7 @@ namespace Identity.Service.Infrastructure.Data.Repositories
             string command = @"INSERT INTO UserRoles (UserId,RoleId) VALUES (@userId,@roleId)";
 
             var row = await connection.ExecuteAsync(command, new { userId, roleId }, transaction);
-            
+
             if (createdNew) connection.Dispose();
 
             return row > 0;
@@ -47,20 +50,69 @@ namespace Identity.Service.Infrastructure.Data.Repositories
             using var connection = await _connection.CreateConnectionAsync();
             string command = @"DELETE FROM UserRoles WHERE UserId = @userId";
 
-            var row = await connection.ExecuteAsync(command, new {userId});
+            var row = await connection.ExecuteAsync(command, new { userId });
 
             return row > 0;
         }
 
-        public Task<IEnumerable<User>> GetAllUserIdByRoleId(int roleId)
+        #endregion
+
+
+        #region QUERIES
+
+        public async Task<IEnumerable<User>> GetAllUserIdByRoleIdAsync(int roleId)
         {
-            throw new NotImplementedException();
+            using var connection = await _connection.CreateConnectionAsync();
+
+                const string sql = @"
+            SELECT 
+                u.Id,
+                u.Email,
+                u.PasswordHash,
+                u.UserRef,
+                u.EntityId,
+                u.MainRoleId,
+                u.IsActive,
+                u.CreatedAt,
+                u.UpdatedAt
+            FROM UserRoles ur
+            INNER JOIN Users u ON u.Id = ur.UserId
+            WHERE ur.RoleId = @roleId
+              AND u.IsActive = 1;
+        ";
+
+                return await connection.QueryAsync<User>(
+                    sql,
+                    new { roleId }
+                );
         }
 
-        public Task<IEnumerable<Role>> GetRolesOfUserId(Guid id)
+        public async Task<IEnumerable<Role>> GetRolesOfUserIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            using var connection = await _connection.CreateConnectionAsync();
+
+                const string sql = @"
+                SELECT 
+                    r.Id,
+                    r.Name,
+                    r.Description,
+                    r.IsSystemRole,
+                    r.IsActive,
+                    r.CreatedAt,
+                    r.UpdatedAt
+                FROM UserRoles ur
+                INNER JOIN Roles r ON r.Id = ur.RoleId
+                WHERE ur.UserId = @userId
+                  AND r.IsActive = 1;
+            ";
+
+            return await connection.QueryAsync<Role>(
+                sql,
+                new { userId = id }
+            );
         }
+
+        #endregion
 
     }
 }

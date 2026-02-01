@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace Identity.Service.Application.Features.Jwt
 {
-    public interface IRefreshTokenQueries
+    public interface IRefreshTokenQueriesRepository
     {
-        Task<RefreshToken> GetByTokenHashAsync(string tokenHash);
+        Task<RefreshToken?> GetByTokenHashAsync(string tokenHash);
     }
 }

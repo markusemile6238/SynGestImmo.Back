@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Identity.Service.Application.Features.Jwt
 {
-    public interface IRefreshTokenCommands
+    public interface IRefreshTokenCommandsRepository
     {
         Task AddAsync(RefreshToken token, IDbConnection conn, IDbTransaction tx);
         Task RevokeAsync(Guid tokenId,IDbConnection conn, IDbTransaction tx);

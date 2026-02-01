@@ -1,4 +1,5 @@
 ﻿using Identity.Service.Application.Common;
+using Identity.Service.Application.Features.Jwt;
 using Identity.Service.Domain.Repositories.RoleRepositories;
 using Identity.Service.Domain.Repositories.UserRolesRepositories;
 using Identity.Service.Infrastructure.Data;
@@ -35,6 +36,12 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddScoped<UserRolesRepository>();
             services.AddScoped<IUserRolesCommandRepository>(sp => sp.GetRequiredService<UserRolesRepository>());
             services.AddScoped<IUserRolesQueryRepository>(sp => sp.GetRequiredService<UserRolesRepository>());
+
+            // pour les refreshToken
+
+            services.AddScoped<RefreshTokenRepository>();
+            services.AddScoped<IRefreshTokenCommandsRepository>(sp => sp.GetRequiredService<RefreshTokenRepository>());
+            services.AddScoped<IRefreshTokenQueriesRepository>(sp => sp.GetRequiredService<RefreshTokenRepository>());
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             

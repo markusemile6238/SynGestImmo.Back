@@ -10,7 +10,7 @@ namespace Identity.Service.Domain.Repositories.UserRolesRepositories
 {
     public interface IUserRolesQueryRepository
     {
-        Task<IEnumerable<Role>> GetRolesOfUserId(Guid id);
-        Task<IEnumerable<User>> GetAllUserIdByRoleId(int roleId);
+        Task<IEnumerable<Role>> GetRolesOfUserIdAsync(Guid id);
+        Task<IEnumerable<User>> GetAllUserIdByRoleIdAsync(int roleId);
     }
 }

@@ -4,6 +4,7 @@ using Identity.Service.API.Validators.User;
 using Identity.Service.Application;
 using Identity.Service.Application.Common;
 using Identity.Service.Infrastructure.Handlers;
+using Identity.Service.Infrastructure.Jwt;
 using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,6 +20,8 @@ builder.Services.AddApplication();
 
 builder.Services.AddScoped<ISqlExceptionTranslator, SqlExceptionsHandler>();
 
+// JWt Token
+builder.Services.AddScoped<ITokenService, JwtTokenService>();
 
 
 builder.Services.AddControllers()
