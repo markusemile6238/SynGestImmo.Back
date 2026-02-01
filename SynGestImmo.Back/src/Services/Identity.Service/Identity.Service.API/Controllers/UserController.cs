@@ -5,6 +5,7 @@ using Identity.Service.Application.Features.UserFeature.Queries.GetUserByEmail;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Tools.Result;
+using Identity.Service.API.Extensions;
 
 namespace Identity.Service.API.Controllers
 {
@@ -27,7 +28,7 @@ namespace Identity.Service.API.Controllers
 
 
         [HttpPost]
-        public async Task<CqsResult> CreateUserAsync([FromBody] CreateUserDto dto)
+        public async Task<IActionResult> CreateUserAsync([FromBody] CreateUserDto dto)
         {
 
             if (!ModelState.IsValid) {
@@ -37,7 +38,12 @@ namespace Identity.Service.API.Controllers
                         kvp => kvp.Key,
                         kvp => kvp.Value.Errors.Select(e=>e.ErrorMessage).ToArray()
                     );
-                return CqsResult.Failure(Error.Validation("Invalid request data",errors));                    
+                return BadRequest(
+                    CqsResult.Failure(
+                        Error.Validation("Invalid request data",errors
+                        )
+                     )
+                    );                    
             }
 
             _logger.LogInformation("Creation of new user");
@@ -52,7 +58,7 @@ namespace Identity.Service.API.Controllers
 
             var result = await _mediator.Send(command);
            
-            return result;        
+            return result.ToActionResult();        
         }
 
         [HttpGet]

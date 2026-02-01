@@ -97,7 +97,7 @@ namespace Identity.Service.Application.Features.UserFeature.Commands.CreateUser
 
                 _logger.LogInformation("New User Create successfully");
 
-                return CqsResult.Success(201);
+                return CqsResult.Success();
             
             }
             catch (SqlException ex)
