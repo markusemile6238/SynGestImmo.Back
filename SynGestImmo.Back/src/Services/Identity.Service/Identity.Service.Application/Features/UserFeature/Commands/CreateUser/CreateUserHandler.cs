@@ -1,5 +1,4 @@
 ﻿using Identity.Service.Application.Common;
-using Identity.Service.Application.Features.UserFeature.Commands.CreateUser;
 using Identity.Service.Application.Features.UserFeature.Services;
 using Identity.Service.Domain.Entities;
 using Identity.Service.Domain.Repositories.RoleRepositories;
@@ -97,7 +96,7 @@ namespace Identity.Service.Application.Features.UserFeature.Commands.CreateUser
 
                 _logger.LogInformation("New User Create successfully");
 
-                return CqsResult.Success();
+                return CqsResult.Success("New user created successfully");
             
             }
             catch (SqlException ex)

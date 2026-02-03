@@ -23,9 +23,10 @@ namespace Identity.Service.Infrastructure.Data.Repositories
             _logger = logger;
         }
 
-        #region COMMANDS
+        // COMMANDS
 
 
+        #region AssignRoleToUserAsync
         public async Task<bool> AssignRoleToUserAsync(Guid userId, int roleId, IDbConnection? connection = null, IDbTransaction? transaction = null)
         {
 
@@ -44,7 +45,9 @@ namespace Identity.Service.Infrastructure.Data.Repositories
 
             return row > 0;
         }
+        #endregion
 
+        #region DeleteUserRoleAsync
         public async Task<bool> DeleteUserRoleAsync(Guid userId)
         {
             using var connection = await _connection.CreateConnectionAsync();
@@ -54,17 +57,18 @@ namespace Identity.Service.Infrastructure.Data.Repositories
 
             return row > 0;
         }
-
         #endregion
 
 
-        #region QUERIES
 
+        // QUERIES
+
+        #region  GetAllUserIdByRoleIdAsync
         public async Task<IEnumerable<User>> GetAllUserIdByRoleIdAsync(int roleId)
         {
             using var connection = await _connection.CreateConnectionAsync();
 
-                const string sql = @"
+            const string sql = @"
             SELECT 
                 u.Id,
                 u.Email,
@@ -81,17 +85,19 @@ namespace Identity.Service.Infrastructure.Data.Repositories
               AND u.IsActive = 1;
         ";
 
-                return await connection.QueryAsync<User>(
-                    sql,
-                    new { roleId }
-                );
+            return await connection.QueryAsync<User>(
+                sql,
+                new { roleId }
+            );
         }
+        #endregion
 
+        #region  GetRolesOfUserIdAsyn
         public async Task<IEnumerable<Role>> GetRolesOfUserIdAsync(Guid id)
         {
             using var connection = await _connection.CreateConnectionAsync();
 
-                const string sql = @"
+            const string sql = @"
                 SELECT 
                     r.Id,
                     r.Name,
@@ -110,9 +116,10 @@ namespace Identity.Service.Infrastructure.Data.Repositories
                 sql,
                 new { userId = id }
             );
-        }
-
+        } 
         #endregion
+
+
 
     }
 }

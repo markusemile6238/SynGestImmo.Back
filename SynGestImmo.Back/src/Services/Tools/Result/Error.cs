@@ -5,6 +5,11 @@
 
         public static CqsError Validation(string message, Object? details=null)
          => new() { Code = "VALIDATION_ERROR", Message = message, StatusCode = 400, Details = details };
+        
+        public static CqsError Forbidden(string message)
+         => new() { Code = "FORBIDDEN_ERROR", Message = message, StatusCode = 403};
+
+
 
         public static CqsError NotFound(string message)
             => new() { Code = "NOT_FOUND", Message = message, StatusCode = 404 };
@@ -14,6 +19,10 @@
 
         public static CqsError Unknown(string message)
             => new() { Code = "UNKNOWN_ERROR", Message = message, StatusCode = 500 };
+        
+       
+
+
 
 
 

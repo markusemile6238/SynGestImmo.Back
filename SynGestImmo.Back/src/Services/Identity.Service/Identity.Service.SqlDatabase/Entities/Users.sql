@@ -2,6 +2,7 @@
 		[Id] UNIQUEIDENTIFIER  DEFAULT NEWID(),
 		[Email] NVARCHAR(150) UNIQUE NOT NULL,
         [PasswordHash] NVARCHAR(255) NOT NULL,
+		[MustChangePassword] BIT DEFAULT 1,
         [UserRef] NVARCHAR(50) UNIQUE NOT NULL,
 		[EntityId] UNIQUEIDENTIFIER NULL,
         [MainRoleId] int NULL , -- role Principal

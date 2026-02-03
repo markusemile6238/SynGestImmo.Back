@@ -1,4 +1,4 @@
-﻿using Identity.Service.Application.DTOS.UserDto;
+﻿using Identity.Service.Application.DTOS.UserDtos;
 using Identity.Service.Application.Features.UserFeature.Commands.CreateUser;
 using Identity.Service.Application.Features.UserFeature.Commands.DeleteUser;
 using Identity.Service.Application.Features.UserFeature.Queries.GetUserByEmail;
@@ -6,15 +6,18 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Tools.Result;
 using Identity.Service.API.Extensions;
+using Identity.Service.Application.Features.UserFeature.Queries.GetAllUser;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Identity.Service.API.Controllers
 {
 
     [Route("api/auth/admin/user")] 
     [ApiController]
+    [Authorize(Policy = "PasswordChanged")]
     [Consumes("application/json")] // Accepter JSON
     [Produces("application/json")] // Retourner JSON
-    public class UserController : Controller
+    public class UserController : ControllerBase
     {
         private readonly IMediator _mediator;
         private readonly ILogger<UserController> _logger;
@@ -26,6 +29,15 @@ namespace Identity.Service.API.Controllers
         }
 
 
+
+        [HttpGet]
+        [Route("All")]
+        public async Task<IActionResult> GetAllAsync()
+        {
+            var query = new GetAllUserQuery();
+            var result = await _mediator.Send(query);
+            return Ok(result);
+        }
 
         [HttpPost]
         public async Task<IActionResult> CreateUserAsync([FromBody] CreateUserDto dto)

@@ -21,8 +21,8 @@
   <ItemGroup>
     <Folder Include="Exceptions\" />
     <Folder Include="Features\CleaningDb\" />
-    <Folder Include="Features\RoleFeature\GetRoleById\" />
     <Folder Include="Features\RoleFeature\Commands\" />
+    <Folder Include="Features\RoleFeature\Commands\GetRoleById\" />
     <Folder Include="Features\UserRoleFeature\Queries\" />
   </ItemGroup>
 

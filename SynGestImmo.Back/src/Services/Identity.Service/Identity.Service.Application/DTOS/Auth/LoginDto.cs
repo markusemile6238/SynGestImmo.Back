@@ -16,5 +16,7 @@ namespace Identity.Service.Application.DTOS.Auth
         [MinLength(6)]
         
         public string Password { get; set; }
+    
+        
     }
 }

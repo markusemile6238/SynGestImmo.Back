@@ -7,6 +7,7 @@ namespace Identity.Service.Infrastructure.Data.Repositories.UserRepositories
     public interface IUserQueryRepository
     {
         //Queries
+
         Task<IEnumerable<User>> GetAllUserAsync();
         Task<User?> GetUserByIdAsync(Guid id);
         Task<User?> GetUserByEmailAsync(string email);
@@ -16,7 +17,8 @@ namespace Identity.Service.Infrastructure.Data.Repositories.UserRepositories
         Task<IEnumerable<User>> SearchUsersAsync(string searchTerm, int limit = 50);
         Task<bool> ExistsByEmailAsync(string email);
         Task<bool> ExistsByUserRefAsync(string userRef);
-   
+
+
 
 
     }

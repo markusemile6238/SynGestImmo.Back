@@ -39,10 +39,27 @@ namespace Identity.Service.Infrastructure.Data.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Role>> GetAllRoleAsync()
+        #region GetAllRoleAsync
+        public async Task<IEnumerable<Role>> GetAllRoleAsync()
         {
-            throw new NotImplementedException();
-        }
+            using var connection = await _connection.CreateConnectionAsync();
+            const string sql = @"
+                SELECT 
+                    Id,
+                    Name,
+                    Description,
+                    IsSystemRole,
+                    IsActive,
+                    Prefixe,
+                    CreatedAt,
+                    UpdatedAt 
+                FROM Roles 
+                WHERE IsActive=1";
+
+            var roles = await connection.QueryAsync<Role>(sql);
+            return roles;
+        } 
+        #endregion
 
         #region GetRoleByIdAsynch
         public async Task<Role?> GetRoleByIdAsync(int id)

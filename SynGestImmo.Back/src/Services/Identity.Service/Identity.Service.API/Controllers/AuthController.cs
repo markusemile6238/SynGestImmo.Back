@@ -3,15 +3,18 @@ using Identity.Service.Application.DTOS.Jwt;
 using Identity.Service.Application.Features.Auth;
 using Identity.Service.Application.Features.Jwt;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Tools.Result;
+
+
 
 namespace Identity.Service.API.Controllers
 {
     [Route("api/auth")]
     [ApiController]
     [Produces("application/json")] // Retourner JSON
-    public class AuthController : Controller
+    public class AuthController : ControllerBase
     {
         private readonly IMediator _mediator;
         private readonly ILogger<AuthController> _logger;
@@ -22,16 +25,27 @@ namespace Identity.Service.API.Controllers
             _logger = logger;
         }
 
+
+        [HttpGet("debug")]
+        public IActionResult DebugAuth()
+        {
+            return Ok(new
+            {
+                IsAuthenticated = User.Identity?.IsAuthenticated,
+                Name = User.Identity?.Name,
+                Claims = User.Claims.Select(c => new { c.Type, c.Value })
+            });
+        }
+
+
+        #region LOGIN
+
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody]LoginDto dto)
+        public async Task<IActionResult> Login([FromBody] LoginDto dto)
         {
             _logger.LogInformation("DTO reçu: {@dto}", dto);
             if (dto == null)
-                return BadRequest(
-                    CqsResult.Failure(
-                        Error.Validation("Request body is missing or invalid JSON")
-                    )
-                );
+                return BadRequest(CqsResult.Failure(Error.Validation("Request body is missing or invalid JSON")));
 
             var result = await _mediator.Send(
                 new LoginCommand { Email = dto.Email, Password = dto.Password }
@@ -40,20 +54,30 @@ namespace Identity.Service.API.Controllers
             return Ok(result);
         }
 
+        #endregion
+
+        #region REFRESH TOKEN
+
         [HttpPost("refresh")]
-        public async Task<IActionResult> Refresh([FromBody]RefreshTokenDto dto)
+        [Authorize(Policy = "PasswordChanged")]
+        public async Task<IActionResult> Refresh([FromBody] RefreshTokenDto dto)
         {
             _logger.LogInformation("DTO reçu: {@dto}", dto);
             if (dto == null)
-            return BadRequest(
-                CqsResult.Failure(
-                    Error.Validation("Request body is missing or invalid JSON")
-                )
-            );
+                return BadRequest(
+                    CqsResult.Failure(
+                        Error.Validation("Request body is missing or invalid JSON")
+                    )
+                );
             var result = await _mediator.Send(
                 new RefreshTokenCommand { RefreshToken = dto.RefreshToken }
             );
             return Ok(result);
         }
+        #endregion
+
+
+
+
     }
 }

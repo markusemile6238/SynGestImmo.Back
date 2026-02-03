@@ -11,10 +11,13 @@ namespace Identity.Service.Application.DTOS.Auth
         public string AccessToken { get; set; }
         public string RefreshToken { get; set; }
 
-        public LoginResponseDto(string accessToken, string refreshToken)
+        public bool MustChangePassword { get; set; }
+
+        public LoginResponseDto(string accessToken, string refreshToken, bool mustChangePassword)
         {
             AccessToken = accessToken;
             RefreshToken = refreshToken;
+            MustChangePassword = mustChangePassword;
         }
     }
 }

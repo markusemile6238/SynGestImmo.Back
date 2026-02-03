@@ -29,6 +29,7 @@ namespace Identity.Service.Infrastructure.Data.Repositories
             throw new NotImplementedException();
         }
 
+        // commands
 
         #region CreateUserAsync
         public async Task<Guid> CreateUserAsync(User user, IDbConnection connection, IDbTransaction transaction)
@@ -80,6 +81,28 @@ namespace Identity.Service.Infrastructure.Data.Repositories
 
         #endregion
 
+        #region ChangePassword
+        public async Task<bool> ChangePassword(string oldPasswordHash, string newPasswordHash, string email)
+        {
+            using var connection = await _connection.CreateConnectionAsync();
+            const string sql = @"
+                UPDATE Users 
+                SET 
+                    PasswordHash = @NewPasswordHash,
+                    MustChangePassword = 0
+                WHERE Email = @Email AND PasswordHash = @OldPasswordHash";
+
+            var rowAffected = await connection.ExecuteAsync(sql, new
+            {
+                NewPasswordHash = newPasswordHash,
+                Email = email,
+                OldPasswordHash = oldPasswordHash,
+                
+            });
+
+            return rowAffected > 0;
+        } 
+        #endregion
 
         #region DesactivateUserAsync
         public Task<bool> DeactivateUserAsync(Guid userId)
@@ -101,30 +124,12 @@ namespace Identity.Service.Infrastructure.Data.Repositories
         } 
         #endregion
 
-        #region ExistsByEmailAsync
 
-        public async Task<bool> ExistsByEmailAsync(string email)
-        {
 
-            using var connection = await _connection.CreateConnectionAsync();
-            var sql = @"SELECT COUNT(1) FROM Users WHERE Email = @Email";
-            var count = await connection.ExecuteScalarAsync<int>(sql, new { email });
-            return count > 0;
+        // queries
 
-        }
 
-        #endregion
-
-        #region ExistsByUserRefAsync
-
-        public async Task<bool> ExistsByUserRefAsync(string userRef)
-        {
-
-            using var connection = await _connection.CreateConnectionAsync();
-            var sql = @"SELECT COUNT(1) FROM Users WHERE UserRef = @UserRef";
-            var user = await connection.ExecuteScalarAsync<int>(sql, new { userRef });
-            return user > 1;
-        }
+        #region GetAllUserAsync
 
         public async Task<IEnumerable<User>> GetAllUserAsync()
         {
@@ -137,22 +142,7 @@ namespace Identity.Service.Infrastructure.Data.Repositories
         }
 
         #endregion
-
-        #region UpdateRefreshTokenAsync
-        public Task<bool> UpdateRefreshTokenAsync(Guid userId, string? refreshToken, DateTime? expiry)
-        {
-            throw new NotImplementedException();
-        }
-        #endregion
-
-        #region UpdateUserAsync
-        public Task<bool> UpdateUserAsync(User user)
-        {
-            throw new NotImplementedException();
-        } 
-        #endregion
-
-
+        
         #region GetUserByEmailAsync
         public async Task<User?> GetUserByEmailAsync(string email)
         {
@@ -213,8 +203,67 @@ namespace Identity.Service.Infrastructure.Data.Repositories
         {
             throw new NotImplementedException();
         }
+
+       
+        #endregion
+       
+        #region UpdateRefreshTokenAsync
+        public Task<bool> UpdateRefreshTokenAsync(Guid userId, string? refreshToken, DateTime? expiry)
+        {
+            throw new NotImplementedException();
+        }
         #endregion
 
+        #region UpdateUserAsync
+        public async Task<bool> UpdateUserAsync(User user)
+        {
+            using var connection = await _connection.CreateConnectionAsync();
+            const string command = @"
+                UPDATE Users 
+                SET 
+                    Email = @Email,
+                    PasswordHash = @PasswordHash,
+                    UserRef = @UserRef,
+                    EntityId = @EntityId,
+                    MainRoleId = @MainRoleId,
+                    IsActive = @IsActive,
+                    UpdatedAt = @UpdatedAt
+                WHERE Id = @Id";
+
+            var result = await connection.ExecuteAsync(command, user);
+            return result == 1;
+
+        }
+        #endregion
+
+        #region ExistsByEmailAsync
+
+        public async Task<bool> ExistsByEmailAsync(string email)
+        {
+
+            using var connection = await _connection.CreateConnectionAsync();
+            var sql = @"SELECT COUNT(1) FROM Users WHERE Email = @Email";
+            var count = await connection.ExecuteScalarAsync<int>(sql, new { email });
+            return count > 0;
+
+        }
+
+        #endregion
+
+        #region ExistsByUserRefAsync
+
+        public async Task<bool> ExistsByUserRefAsync(string userRef)
+        {
+
+            using var connection = await _connection.CreateConnectionAsync();
+            var sql = @"SELECT COUNT(1) FROM Users WHERE UserRef = @UserRef";
+            var user = await connection.ExecuteScalarAsync<int>(sql, new { userRef });
+            return user > 1;
+        }
+        #endregion
+       
+
+        
 
     }
 }

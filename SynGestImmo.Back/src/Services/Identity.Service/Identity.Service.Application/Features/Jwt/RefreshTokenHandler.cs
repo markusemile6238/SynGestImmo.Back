@@ -80,7 +80,7 @@ namespace Identity.Service.Application.Features.Jwt
             });
 
             return CqsResult<LoginResponseDto>.Success(
-                 new LoginResponseDto(newAccessToken, newRefreshToken)
+                 new LoginResponseDto(newAccessToken, newRefreshToken,user.MustChangePassword)
                 );
 
         }

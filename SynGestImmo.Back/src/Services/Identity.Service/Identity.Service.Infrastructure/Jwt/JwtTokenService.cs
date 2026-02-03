@@ -24,8 +24,10 @@ namespace Identity.Service.Infrastructure.Jwt
            {
                new Claim(JwtRegisteredClaimNames.Sub,user.Id.ToString()),
                new Claim(JwtRegisteredClaimNames.Email,user.Email),
+               new Claim("mustChangePassword",user.MustChangePassword.ToString().ToLower()),
                new Claim("userRef",user.UserRef),
                new Claim("entityId",user.EntityId.ToString())
+
            };
 
             foreach (var role in roles)
@@ -40,7 +42,7 @@ namespace Identity.Service.Infrastructure.Jwt
                 audience: _config["Jwt:Audience"],
                 claims: claims,
                 expires: DateTime.UtcNow.AddMinutes(15),
-                signingCredentials : creds
+                signingCredentials: creds
                 );
 
             return new JwtSecurityTokenHandler().WriteToken(token);

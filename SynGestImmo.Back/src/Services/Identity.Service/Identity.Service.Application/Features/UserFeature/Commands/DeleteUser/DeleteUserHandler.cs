@@ -45,7 +45,7 @@ namespace Identity.Service.Application.Features.UserFeature.Commands.DeleteUser
                     return CqsResult.Failure(Error.Database("Not possible to delete user"));
                 }
 
-                return CqsResult.Success();
+                return CqsResult.Success("user was deleted successfully");
             }
             catch(SqlException ex)
             {

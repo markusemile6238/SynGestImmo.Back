@@ -14,6 +14,7 @@ namespace Identity.Service.Infrastructure.Data.Repositories.UserRepositories
         Task<bool> UpdateRefreshTokenAsync(Guid userId, string? refreshToken, DateTime? expiry);
         Task<bool> DeactivateUserAsync(Guid userId);
         Task<bool> ActivateUserAsync(Guid userId);
+        Task<bool> ChangePassword(string oldPasswordHash, string newPasswordHash, string email);
 
     }
 }

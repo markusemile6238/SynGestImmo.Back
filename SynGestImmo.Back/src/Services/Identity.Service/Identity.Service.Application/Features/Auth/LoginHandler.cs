@@ -105,7 +105,7 @@ namespace Identity.Service.Application.Features.Auth
                 await _refreshTokenRepo.AddAsync(tokenEntity, conn, tx);
             });
 
-            return CqsResult<LoginResponseDto>.Success(new LoginResponseDto(accessToken, refreshToken));
+            return CqsResult<LoginResponseDto>.Success(new LoginResponseDto(accessToken, refreshToken,user.MustChangePassword));
 
 
         }

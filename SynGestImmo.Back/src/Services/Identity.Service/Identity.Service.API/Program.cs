@@ -1,71 +1,116 @@
-using FluentValidation;
-using FluentValidation.AspNetCore;
-using Identity.Service.API.Validators.User;
+using Identity.Service.API.Handler;
 using Identity.Service.Application;
 using Identity.Service.Application.Common;
 using Identity.Service.Infrastructure.Handlers;
 using Identity.Service.Infrastructure.Jwt;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.IdentityModel.Tokens;
 using System.Globalization;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
-var builder = WebApplication.CreateBuilder(args);
-
-// globaliztion
-var cultureInfo = new CultureInfo("en-US");
-CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
-CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
-
-// Add services to the container.
-builder.Services.AddInfrastructure();
-builder.Services.AddApplication();
-
-builder.Services.AddScoped<ISqlExceptionTranslator, SqlExceptionsHandler>();
-
-// JWt Token
-builder.Services.AddScoped<ITokenService, JwtTokenService>();
-
-
-builder.Services.AddControllers()
-    .ConfigureApiBehaviorOptions(options =>
-    {
-        options.SuppressModelStateInvalidFilter = true;
-    })
-    .AddJsonOptions(options =>
-    {
-        options.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
-    });
-builder.Services.AddFluentValidationAutoValidation();
-builder.Services.AddFluentValidationClientsideAdapters();
-builder.Services.AddValidatorsFromAssemblyContaining<CreateUserDtoValidator>();
-
-
-builder.Services.AddEndpointsApiExplorer();
-
-
-
-// cors
-builder.Services.AddCors(opts =>
+internal class Program
 {
-    opts.AddPolicy("AllowAll", policy =>
+    private static void Main(string[] args)
     {
-        policy.AllowAnyOrigin()
-              .AllowAnyMethod()
-              .AllowAnyHeader();
-    });
-});
+        var builder = WebApplication.CreateBuilder(args);
 
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+        // globaliztion
+        var cultureInfo = new CultureInfo("en-US");
+        CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
+        CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
 
-var app = builder.Build();
+        // Add services to the container.
+        builder.Services.AddInfrastructure();
+        builder.Services.AddApplication();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
+        builder.Services.AddScoped<ISqlExceptionTranslator, SqlExceptionsHandler>();
+
+        // JWt Token
+        builder.Services.AddScoped<ITokenService, JwtTokenService>();
+
+        // authentification
+        builder.Services
+            .AddAuthentication(opts =>
+            {
+                opts.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                opts.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(opts =>
+            {
+                opts.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+
+                    ValidIssuer = builder.Configuration["Jwt:Issuer"],
+                    ValidAudience = builder.Configuration["Jwt:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(
+                        Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])
+                        ),
+                    NameClaimType=JwtRegisteredClaimNames.Sub,
+                    RoleClaimType=ClaimTypes.Role
+                };
+            });
+
+
+        builder.Services.AddControllers()
+            .ConfigureApiBehaviorOptions(options =>
+            {
+                options.SuppressModelStateInvalidFilter = true;
+            })
+            .AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
+            });
+
+
+
+        builder.Services.AddEndpointsApiExplorer();
+
+        builder.Services.AddAuthorization(opts =>
+        {
+            opts.InvokeHandlersAfterFailure = false;
+            opts.AddPolicy("PasswordChanged", Policy => Policy.Requirements.Add(new PasswordChangeRequirement()));
+        });
+
+        builder.Services.AddSingleton<IAuthorizationHandler, PasswordChangeHandler>();
+        builder.Services.AddSingleton<IAuthorizationMiddlewareResultHandler,PasswordChangedResultHandler>();
+
+
+        // cors
+        builder.Services.AddCors(opts =>
+        {
+            opts.AddPolicy("AllowAll", policy =>
+            {
+                policy.AllowAnyOrigin()
+                      .AllowAnyMethod()
+                      .AllowAnyHeader();
+            });
+        });
+
+        // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+        builder.Services.AddOpenApi();
+
+        var app = builder.Build();
+
+        // Configure the HTTP request pipeline.
+        if (app.Environment.IsDevelopment())
+        {
+            app.MapOpenApi();
+        }
+        app.UseHttpsRedirection();
+
+        app.UseAuthentication();
+        app.UseAuthorization();
+
+
+        app.MapControllers();
+
+        app.Run();
+    }
 }
-app.UseHttpsRedirection();
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.Run();

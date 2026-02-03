@@ -47,7 +47,7 @@ namespace Identity.Service.Application.Features.UserRoleFeature.Commands.AssignR
                 if (!isAssigned)
                     return CqsResult.Failure(Error.Unknown("Cannot Assigne role to user"));
 
-                return CqsResult.Success();
+                return CqsResult.Success("new role assigned successfully");
             }
             catch (SqlException ex)
             {

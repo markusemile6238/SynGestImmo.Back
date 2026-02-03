@@ -1,17 +1,17 @@
-﻿using Identity.Service.Application.DTOS.RoleDto;
-using Identity.Service.Application.Features.RoleFeature.Queries;
-using Identity.Service.Domain.Entities;
+﻿using Identity.Service.Application.Features.RoleFeature.Queries.GetAllRoles;
+using Identity.Service.Application.Features.RoleFeature.Queries.GetRoleById;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Tools.Result;
 
 namespace Identity.Service.API.Controllers
 {
     [Route("api/auth/admin/role")]
     [ApiController]
+    [Authorize(Policy = "PasswordChanged")]
     [Consumes("application/json")] // Accepter JSON
     [Produces("application/json")] // Retourner JSON
-    public class RoleController : Controller
+    public class RoleController : ControllerBase
     {
         private readonly IMediator _mediator;
         private readonly ILogger<RoleController> _logger;
@@ -20,6 +20,16 @@ namespace Identity.Service.API.Controllers
         {
             _mediator = mediator;
             _logger = logger;
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllRoles()
+        {
+            _logger.LogInformation("Search all roles");
+            var command = new GetAllRolesQuery();
+            var result = await _mediator.Send(command);
+            return Ok(result);
         }
 
 
