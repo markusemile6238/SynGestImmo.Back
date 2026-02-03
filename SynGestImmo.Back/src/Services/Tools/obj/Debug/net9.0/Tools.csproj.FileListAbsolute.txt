@@ -1,0 +1,13 @@
+C:\formation\projet stage\Backend\SynGestImmo.Back\SynGestImmo.Back\src\Services\Tools\bin\Debug\net9.0\Tools.deps.json
+C:\formation\projet stage\Backend\SynGestImmo.Back\SynGestImmo.Back\src\Services\Tools\bin\Debug\net9.0\Tools.dll
+C:\formation\projet stage\Backend\SynGestImmo.Back\SynGestImmo.Back\src\Services\Tools\bin\Debug\net9.0\Tools.pdb
+C:\formation\projet stage\Backend\SynGestImmo.Back\SynGestImmo.Back\src\Services\Tools\obj\Debug\net9.0\Tools.csproj.AssemblyReference.cache
+C:\formation\projet stage\Backend\SynGestImmo.Back\SynGestImmo.Back\src\Services\Tools\obj\Debug\net9.0\Tools.GeneratedMSBuildEditorConfig.editorconfig
+C:\formation\projet stage\Backend\SynGestImmo.Back\SynGestImmo.Back\src\Services\Tools\obj\Debug\net9.0\Tools.AssemblyInfoInputs.cache
+C:\formation\projet stage\Backend\SynGestImmo.Back\SynGestImmo.Back\src\Services\Tools\obj\Debug\net9.0\Tools.AssemblyInfo.cs
+C:\formation\projet stage\Backend\SynGestImmo.Back\SynGestImmo.Back\src\Services\Tools\obj\Debug\net9.0\Tools.csproj.CoreCompileInputs.cache
+C:\formation\projet stage\Backend\SynGestImmo.Back\SynGestImmo.Back\src\Services\Tools\obj\Debug\net9.0\Tools.sourcelink.json
+C:\formation\projet stage\Backend\SynGestImmo.Back\SynGestImmo.Back\src\Services\Tools\obj\Debug\net9.0\Tools.dll
+C:\formation\projet stage\Backend\SynGestImmo.Back\SynGestImmo.Back\src\Services\Tools\obj\Debug\net9.0\refint\Tools.dll
+C:\formation\projet stage\Backend\SynGestImmo.Back\SynGestImmo.Back\src\Services\Tools\obj\Debug\net9.0\Tools.pdb
+C:\formation\projet stage\Backend\SynGestImmo.Back\SynGestImmo.Back\src\Services\Tools\obj\Debug\net9.0\ref\Tools.dll
