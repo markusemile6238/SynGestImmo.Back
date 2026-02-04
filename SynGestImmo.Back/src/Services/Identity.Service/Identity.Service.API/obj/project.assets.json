@@ -2280,23 +2280,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Pro\\.nuget\\packages\\": {},
+    "C:\\Users\\Papa\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\formation\\projet stage\\Backend\\SynGestImmo.Back\\SynGestImmo.Back\\src\\Services\\Identity.Service\\Identity.Service.API\\Identity.Service.API.csproj",
+      "projectUniqueName": "C:\\formations\\technofutur\\PROJET FIN\\SynGestImmo\\SynGestImmo.Back\\SynGestImmo.Back\\src\\Services\\Identity.Service\\Identity.Service.API\\Identity.Service.API.csproj",
       "projectName": "Identity.Service.API",
-      "projectPath": "C:\\formation\\projet stage\\Backend\\SynGestImmo.Back\\SynGestImmo.Back\\src\\Services\\Identity.Service\\Identity.Service.API\\Identity.Service.API.csproj",
-      "packagesPath": "C:\\Users\\Pro\\.nuget\\packages\\",
-      "outputPath": "C:\\formation\\projet stage\\Backend\\SynGestImmo.Back\\SynGestImmo.Back\\src\\Services\\Identity.Service\\Identity.Service.API\\obj\\",
+      "projectPath": "C:\\formations\\technofutur\\PROJET FIN\\SynGestImmo\\SynGestImmo.Back\\SynGestImmo.Back\\src\\Services\\Identity.Service\\Identity.Service.API\\Identity.Service.API.csproj",
+      "packagesPath": "C:\\Users\\Papa\\.nuget\\packages\\",
+      "outputPath": "C:\\formations\\technofutur\\PROJET FIN\\SynGestImmo\\SynGestImmo.Back\\SynGestImmo.Back\\src\\Services\\Identity.Service\\Identity.Service.API\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\Pro\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Papa\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -2305,23 +2305,24 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net9.0": {
           "targetAlias": "net9.0",
           "projectReferences": {
-            "C:\\formation\\projet stage\\Backend\\SynGestImmo.Back\\SynGestImmo.Back\\src\\Services\\Identity.Service\\Identity.Service.Application\\Identity.Service.Application.csproj": {
-              "projectPath": "C:\\formation\\projet stage\\Backend\\SynGestImmo.Back\\SynGestImmo.Back\\src\\Services\\Identity.Service\\Identity.Service.Application\\Identity.Service.Application.csproj"
+            "C:\\formations\\technofutur\\PROJET FIN\\SynGestImmo\\SynGestImmo.Back\\SynGestImmo.Back\\src\\Services\\Identity.Service\\Identity.Service.Application\\Identity.Service.Application.csproj": {
+              "projectPath": "C:\\formations\\technofutur\\PROJET FIN\\SynGestImmo\\SynGestImmo.Back\\SynGestImmo.Back\\src\\Services\\Identity.Service\\Identity.Service.Application\\Identity.Service.Application.csproj"
             },
-            "C:\\formation\\projet stage\\Backend\\SynGestImmo.Back\\SynGestImmo.Back\\src\\Services\\Identity.Service\\Identity.Service.Domain\\Identity.Service.Domain.csproj": {
-              "projectPath": "C:\\formation\\projet stage\\Backend\\SynGestImmo.Back\\SynGestImmo.Back\\src\\Services\\Identity.Service\\Identity.Service.Domain\\Identity.Service.Domain.csproj"
+            "C:\\formations\\technofutur\\PROJET FIN\\SynGestImmo\\SynGestImmo.Back\\SynGestImmo.Back\\src\\Services\\Identity.Service\\Identity.Service.Domain\\Identity.Service.Domain.csproj": {
+              "projectPath": "C:\\formations\\technofutur\\PROJET FIN\\SynGestImmo\\SynGestImmo.Back\\SynGestImmo.Back\\src\\Services\\Identity.Service\\Identity.Service.Domain\\Identity.Service.Domain.csproj"
             },
-            "C:\\formation\\projet stage\\Backend\\SynGestImmo.Back\\SynGestImmo.Back\\src\\Services\\Identity.Service\\Identity.Service.Infrastructure\\Identity.Service.Infrastructure.csproj": {
-              "projectPath": "C:\\formation\\projet stage\\Backend\\SynGestImmo.Back\\SynGestImmo.Back\\src\\Services\\Identity.Service\\Identity.Service.Infrastructure\\Identity.Service.Infrastructure.csproj"
+            "C:\\formations\\technofutur\\PROJET FIN\\SynGestImmo\\SynGestImmo.Back\\SynGestImmo.Back\\src\\Services\\Identity.Service\\Identity.Service.Infrastructure\\Identity.Service.Infrastructure.csproj": {
+              "projectPath": "C:\\formations\\technofutur\\PROJET FIN\\SynGestImmo\\SynGestImmo.Back\\SynGestImmo.Back\\src\\Services\\Identity.Service\\Identity.Service.Infrastructure\\Identity.Service.Infrastructure.csproj"
             },
-            "C:\\formation\\projet stage\\Backend\\SynGestImmo.Back\\SynGestImmo.Back\\src\\Services\\Tools\\Tools.csproj": {
-              "projectPath": "C:\\formation\\projet stage\\Backend\\SynGestImmo.Back\\SynGestImmo.Back\\src\\Services\\Tools\\Tools.csproj"
+            "C:\\formations\\technofutur\\PROJET FIN\\SynGestImmo\\SynGestImmo.Back\\SynGestImmo.Back\\src\\Services\\Tools\\Tools.csproj": {
+              "projectPath": "C:\\formations\\technofutur\\PROJET FIN\\SynGestImmo\\SynGestImmo.Back\\SynGestImmo.Back\\src\\Services\\Tools\\Tools.csproj"
             }
           }
         }
@@ -2378,7 +2379,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.309/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.310/PortableRuntimeIdentifierGraph.json"
       }
     }
   },
