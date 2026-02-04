@@ -5,6 +5,7 @@ using Identity.Service.Infrastructure.Handlers;
 using Identity.Service.Infrastructure.Jwt;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
@@ -85,11 +86,13 @@ internal class Program
         // cors
         builder.Services.AddCors(opts =>
         {
-            opts.AddPolicy("AllowAll", policy =>
+            opts.AddPolicy("Frontend", policy =>
             {
-                policy.AllowAnyOrigin()
-                      .AllowAnyMethod()
-                      .AllowAnyHeader();
+                policy
+                    .WithOrigins("http://localhost:4200")
+                    .AllowCredentials()
+                    .AllowAnyHeader()
+                    .AllowAnyMethod();
             });
         });
 
@@ -103,7 +106,7 @@ internal class Program
         {
             app.MapOpenApi();
         }
-        app.UseCors("AllowAll");
+        app.UseCors("Frontend");
         app.UseHttpsRedirection();                
         app.UseAuthentication();
         app.UseAuthorization();

@@ -1,0 +1,73 @@
+## --- Exécutables et fichiers de build ---
+[Bb]in/
+[Oo]bj/
+[Aa]rm/
+[Aa]rm64/
+[Xx]64/
+[Xx]86/
+
+## --- Fichiers générés par Visual Studio ---
+.vs/
+*.user
+*.userosscache
+*.sln.docstates
+*.suo
+*.userprefs
+
+## --- Fichiers de configuration de VS Code ---
+.vscode/
+# Note : Décommentez la ligne ci-dessous si vous voulez ignorer vos paramètres perso VS Code
+# !.vscode/settings.json
+
+## --- Packages NuGet ---
+*.nupkg
+# Dossier de packages standard
+packages/
+# Dossier de cache NuGet (souvent inutile à versionner)
+node_modules/
+
+## --- Fichiers de base de données et logs ---
+*.log
+*.sqlproj.user
+*.dbmdl
+*.dbproj.user
+*.mdf
+*.ldf
+
+## --- Résultats de tests et couverture de code ---
+TestResults/
+*.sequencediagram.layout
+*.vsp
+*.psess
+*.vspx
+*.sap
+Edge/
+GeneratedReports/
+
+## --- Azure Functions / Développement Local ---
+bin/
+obj/
+local.settings.json
+
+## --- Divers (OS et outils) ---
+.DS_Store
+Thumbs.db
+
+## --- Spécifique aux API ASP.NET Core ---
+
+# Fichiers de configuration locale (contiennent souvent des secrets ou URLs locales)
+# On garde appsettings.json, mais on ignore les versions de dev spécifiques ou locales
+appsettings.Development.json
+appsettings.Local.json
+
+# Fichiers de configuration de lancement (ports, variables d'env)
+# À ignorer si chaque développeur a sa propre config de port
+[Pp]roperties/launchSettings.json
+
+# Secrets de l'utilisateur (User Secrets)
+# Normalement stockés hors du projet, mais au cas où :
+secrets.json
+
+# Fichiers de cache de documentation API
+.xml
+!*.Documentation.xml # Garder si vous générez de la doc XML spécifique
