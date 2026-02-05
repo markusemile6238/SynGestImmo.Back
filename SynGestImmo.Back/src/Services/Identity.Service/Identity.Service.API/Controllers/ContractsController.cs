@@ -38,11 +38,10 @@ namespace Identity.Service.API.Controllers
                         Error.Validation("Invalid model", errors)));
             }
 
-            _logger.LogInformation("Renewing password for user with ID: {Email}", dto.Email);
+            _logger.LogInformation("Renewing password");
 
             var command = new ChangePasswordCommand { 
-                Email = dto.Email,
-                OldPassword = dto.CurrentPassword,
+                CurrentPassword = dto.CurrentPassword,
                 NewPassword = dto.NewPassword,
                 ConfirmPassword = dto.ConfirmPassword
             };

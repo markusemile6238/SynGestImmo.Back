@@ -14,7 +14,7 @@ namespace Identity.Service.API.Extensions
 
                     201 => new StatusCodeResult(StatusCodes.Status201Created),
                     204 => new StatusCodeResult(StatusCodes.Status204NoContent),
-                    _ => new OkResult()
+                    _ => new OkObjectResult(result)
                 };
             }
 

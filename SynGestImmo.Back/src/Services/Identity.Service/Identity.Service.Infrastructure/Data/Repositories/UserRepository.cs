@@ -82,7 +82,7 @@ namespace Identity.Service.Infrastructure.Data.Repositories
         #endregion
 
         #region ChangePassword
-        public async Task<bool> ChangePassword(string oldPasswordHash, string newPasswordHash, string email)
+        public async Task<bool> ChangePassword(string currentPasswordHash, string newPasswordHash, string email)
         {
             using var connection = await _connection.CreateConnectionAsync();
             const string sql = @"
@@ -90,13 +90,13 @@ namespace Identity.Service.Infrastructure.Data.Repositories
                 SET 
                     PasswordHash = @NewPasswordHash,
                     MustChangePassword = 0
-                WHERE Email = @Email AND PasswordHash = @OldPasswordHash";
+                WHERE Email = @Email AND PasswordHash = @CurrentPasswordHash";
 
             var rowAffected = await connection.ExecuteAsync(sql, new
             {
                 NewPasswordHash = newPasswordHash,
                 Email = email,
-                OldPasswordHash = oldPasswordHash,
+                CurrentPasswordHash = currentPasswordHash,
                 
             });
 

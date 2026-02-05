@@ -5,14 +5,13 @@ using Identity.Service.Infrastructure.Handlers;
 using Identity.Service.Infrastructure.Jwt;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-internal class Program
+internal static class Program
 {
     private static void Main(string[] args)
     {
@@ -28,6 +27,7 @@ internal class Program
         builder.Services.AddApplication();
 
         builder.Services.AddScoped<ISqlExceptionTranslator, SqlExceptionsHandler>();
+        builder.Services.AddHttpContextAccessor();
 
         // JWt Token
         builder.Services.AddScoped<ITokenService, JwtTokenService>();

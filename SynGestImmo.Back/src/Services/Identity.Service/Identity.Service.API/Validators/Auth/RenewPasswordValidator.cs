@@ -8,8 +8,6 @@ namespace Identity.Service.API.Validators.Auth
         public RenewPasswordValidator() 
         {
 
-            RuleFor(x => x.Email)
-                .EmailAddress().WithMessage("A valid email address is required");
 
             RuleFor(x => x.CurrentPassword)
                .NotEmpty().WithMessage("Current password is required");

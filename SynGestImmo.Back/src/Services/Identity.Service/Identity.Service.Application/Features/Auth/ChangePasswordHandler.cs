@@ -15,18 +15,24 @@ namespace Identity.Service.Application.Features.Auth
         private readonly IPasswordHasher _passwordHasher;
         private readonly ISqlExceptionTranslator _sqlHandler;
         private readonly ILogger<ChangePasswordHandler> _logger;
+        private readonly ICurrentUserService _currentUserService;
 
-        public ChangePasswordHandler(IUserCommandRepository userCommandRepository, IPasswordHasher passwordHasher, ILogger<ChangePasswordHandler> logger,IUserQueryRepository userQueryRepository,ISqlExceptionTranslator sqlExceptionTranslator)
+        public ChangePasswordHandler(IUserCommandRepository userCommandRepository, IPasswordHasher passwordHasher, ILogger<ChangePasswordHandler> logger,IUserQueryRepository userQueryRepository,ISqlExceptionTranslator sqlExceptionTranslator, ICurrentUserService currentUserService)
         {
             _userCommandRepository = userCommandRepository;
             _passwordHasher = passwordHasher;
             _logger = logger;
             _userQueryRepository = userQueryRepository;
             _sqlHandler = sqlExceptionTranslator;
+            _currentUserService = currentUserService;
+
         }   
 
         public async Task<CqsResult<bool>> Handle(ChangePasswordCommand request, CancellationToken cancellationToken)
         {
+
+            string email = _currentUserService.Email;
+
 
 
             #region VERIFICATIONS
@@ -36,25 +42,32 @@ namespace Identity.Service.Application.Features.Auth
                 return CqsResult<bool>.Failure(Error.Validation("Invalid request"));
             }
 
-            if (string.IsNullOrWhiteSpace(request.OldPassword) || string.IsNullOrWhiteSpace(request.NewPassword) || string.IsNullOrWhiteSpace(request.ConfirmPassword))
+            if(email == null)
             {
-                _logger.LogWarning("Change password failed: one or more password fields are empty for user {Email}", request.Email);
+                _logger.LogWarning("Change password failed: current user email is null");
+                return CqsResult<bool>.Failure(Error.Validation("User not authenticated"));
+            }
+
+            if (string.IsNullOrWhiteSpace(request.CurrentPassword) || string.IsNullOrWhiteSpace(request.NewPassword) || string.IsNullOrWhiteSpace(request.ConfirmPassword))
+            {
+                _logger.LogWarning("Change password failed: one or more password fields are empty for user {Email}", email);
                 return CqsResult<bool>.Failure(Error.Validation("Passwords fields cannot be empty"));
             }
 
             if (request.NewPassword != request.ConfirmPassword)
             {
-                _logger.LogWarning("Change password failed: new password and confirm password do not match for user {Email}", request.Email);
+                _logger.LogWarning("Change password failed: new password and confirm password do not match for user {Email}", email);
                 return CqsResult<bool>.Failure(Error.Validation("New password and confirm password do not match"));
             } 
             #endregion
+           
+            var user = await _userQueryRepository.GetUserByEmailAsync(email);
 
-            var user = await _userQueryRepository.GetUserByEmailAsync(request.Email);
 
-            bool verifPassword = _passwordHasher.VerifyPassword(request.OldPassword, user.PasswordHash);
+            bool verifPassword = _passwordHasher.VerifyPassword(request.CurrentPassword, user.PasswordHash);
             if(!verifPassword)
             {
-                _logger.LogWarning("Change password failed: old password does not match for user {Email}", request.Email);
+                _logger.LogWarning("Change password failed: old password does not match for user {Email}", email);
                 return CqsResult<bool>.Failure(Error.Validation("Password no match !"));
             }
             
@@ -66,7 +79,7 @@ namespace Identity.Service.Application.Features.Auth
             try
             {
 
-            var result = await _userCommandRepository.ChangePassword(user.PasswordHash,newPasswordHash,request.Email);
+            var result = await _userCommandRepository.ChangePassword(user.PasswordHash,newPasswordHash,email);
             
             if (!result)
             {
@@ -77,13 +90,13 @@ namespace Identity.Service.Application.Features.Auth
             }
             catch (SqlException ex)
             {
-                _logger.LogError("SQL_ERROR : Cannot change password :{Message} Number:{Number}",ex.Message,ex.Number);
+
+                _logger.LogError(ex,"SQL_ERROR : Cannot change password :{Message} Number:{Number}",ex.Message,ex.Message);
                 var error = _sqlHandler.Translate(ex);
                 return CqsResult<bool>.Failure(error);
             }
-            catch(Exception ex)
-            {
-                _logger.LogError($"ERROR_UNEXPECTED : {ex}");
+            catch(Exception ex)            {
+                _logger.LogError(ex,"UNEXPECTED_ERROR : {Ex}",ex.Message);
                 return CqsResult<bool>.Failure(Error.Unknown($"{ex}"));
 
             }
