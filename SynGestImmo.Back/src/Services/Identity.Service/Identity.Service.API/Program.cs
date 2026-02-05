@@ -26,6 +26,7 @@ internal class Program
         // Add services to the container.
         builder.Services.AddInfrastructure();
         builder.Services.AddApplication();
+        builder.Services.AddHttpContextAccessor();
 
         builder.Services.AddScoped<ISqlExceptionTranslator, SqlExceptionsHandler>();
 
@@ -91,7 +92,7 @@ internal class Program
                 policy
                     .WithOrigins("http://localhost:4200")
                     .AllowCredentials()
-                    .AllowAnyHeader()
+                    .AllowAnyHeader()                    
                     .AllowAnyMethod();
             });
         });

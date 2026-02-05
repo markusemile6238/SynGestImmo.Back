@@ -1,7 +1,9 @@
-﻿using Identity.Service.API.Validators.Auth;
+﻿using Identity.Service.API.Extensions;
+using Identity.Service.API.Validators.Auth;
 using Identity.Service.Application.DTOS.Auth;
 using Identity.Service.Application.Features.Auth;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Tools.Result;
 
@@ -23,9 +25,15 @@ namespace Identity.Service.API.Controllers
             _mediator = mediator;
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> RenewPassword([FromBody] RenewPasswordDto dto)
         {
+
+            _logger.LogInformation($"----->{dto.OldPassword}");
+            _logger.LogInformation($"----->{dto.NewPassword}");
+            _logger.LogInformation($"----->{dto.ConfirmPassword}");
+
             if (!ModelState.IsValid)
             {
                 var errors = ModelState.Where(e => e.Value.Errors.Count > 0)
@@ -38,18 +46,17 @@ namespace Identity.Service.API.Controllers
                         Error.Validation("Invalid model", errors)));
             }
 
-            _logger.LogInformation("Renewing password for user with ID: {Email}", dto.Email);
+            _logger.LogInformation("Renewing password");
 
             var command = new ChangePasswordCommand { 
-                Email = dto.Email,
-                OldPassword = dto.CurrentPassword,
+                OldPassword = dto.OldPassword,
                 NewPassword = dto.NewPassword,
                 ConfirmPassword = dto.ConfirmPassword
             };
 
             var result = await _mediator.Send(command);
 
-            return Ok(result);
+            return result.ToActionResult();
 
         }
     }

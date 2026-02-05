@@ -45,8 +45,10 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             
-            services.AddScoped<IDapperConnection, DapperContext>(); 
+            services.AddScoped<IDapperConnection, DapperContext>();
 
+           
+            services.AddScoped<ICurrentUserService, CurrentUserService>();
 
 
             return services;

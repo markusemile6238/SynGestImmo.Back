@@ -67,7 +67,7 @@ namespace Identity.Service.Application.Features.Auth
 
             if (!_passwordHasher.VerifyPassword(request.Password, user.PasswordHash))
             {
-                return CqsResult<LoginResponseDto>.Failure(Error.Validation("Invalid credentials"));
+                return CqsResult<LoginResponseDto>.Failure(Error.Validation("Password not valid"));
             }
             ;
 

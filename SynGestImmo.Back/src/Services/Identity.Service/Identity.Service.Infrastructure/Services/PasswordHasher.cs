@@ -11,6 +11,7 @@ namespace Identity.Service.Infrastructure.Services
         private const int Iterations = 100000; // number of salting
         private const char Separator = ':';
 
+
         public string HashPassword(string password)
         {
             if(string.IsNullOrWhiteSpace(password)) 
