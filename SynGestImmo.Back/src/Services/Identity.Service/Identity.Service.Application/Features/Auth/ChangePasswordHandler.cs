@@ -61,7 +61,11 @@ namespace Identity.Service.Application.Features.Auth
             } 
             #endregion
            
+            
             var user = await _userQueryRepository.GetUserByEmailAsync(email);
+
+            if (user == null)
+                return CqsResult<bool>.Failure(Error.NotFound("User not found"));
 
 
             bool verifPassword = _passwordHasher.VerifyPassword(request.CurrentPassword, user.PasswordHash);

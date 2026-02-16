@@ -56,7 +56,9 @@ namespace Identity.Service.Infrastructure.Data.Repositories
                         CreatedAt,
                         RevokedAt
                     FROM RefreshTokens 
-                    WHERE TokenHash = @TokenHash";
+                    WHERE TokenHash = @TokenHash
+                    AND IsRevoked = 0
+                    AND ExpiresAt > SYSUTCDATIME()";
             return await conn.QueryFirstOrDefaultAsync<RefreshToken>(query, new { TokenHash= tokenHash });
         }
 
