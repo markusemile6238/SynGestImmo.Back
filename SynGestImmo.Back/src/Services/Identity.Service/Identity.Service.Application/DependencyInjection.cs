@@ -18,7 +18,6 @@ namespace Identity.Service.Application
             });
 
             services.AddScoped<IUserReferenceService, UserReferenceService>();
-
            
 
             return services;

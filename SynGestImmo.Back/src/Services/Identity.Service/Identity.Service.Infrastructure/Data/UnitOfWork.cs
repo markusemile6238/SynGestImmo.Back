@@ -21,7 +21,7 @@ namespace Identity.Service.Infrastructure.Data
             using var transaction = connection.BeginTransaction();
 
             try
-            {                
+            {                   
                 await action(connection, transaction);
                 transaction.Commit();
             }

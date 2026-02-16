@@ -54,6 +54,7 @@ namespace Identity.Service.Application.Features.Jwt
                 return CqsResult<LoginResponseDto>.Failure(RError.Validation("Invalid refresh token"));
 
             var user = await _userRepo.GetUserByIdAsync(token.UserId);
+
             if(user == null || !user.IsActive)
                 return CqsResult<LoginResponseDto>.Failure(RError.Validation("Invalid user"));
 

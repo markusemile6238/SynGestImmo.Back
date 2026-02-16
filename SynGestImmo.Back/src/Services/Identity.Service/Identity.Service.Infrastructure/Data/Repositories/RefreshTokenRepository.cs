@@ -33,7 +33,10 @@ namespace Identity.Service.Infrastructure.Data.Repositories
 
         public async Task RevokeAsync(Guid tokenId, IDbConnection conn, IDbTransaction tx)
         {
-            const string sql = @"UPDATE RefreshTokens SET IsRevoked=1,RevokedAt=SYSUTCDATETIME() WHERE Id=@TokenId";
+            const string sql = @"
+                UPDATE RefreshTokens 
+                SET IsRevoked=1,RevokedAt=SYSUTCDATETIME() 
+                WHERE Id=@TokenId";
             await conn.ExecuteAsync(sql, new { tokenId },tx);
         }
 
@@ -56,7 +59,9 @@ namespace Identity.Service.Infrastructure.Data.Repositories
                         CreatedAt,
                         RevokedAt
                     FROM RefreshTokens 
-                    WHERE TokenHash = @TokenHash";
+                    WHERE TokenHash = @TokenHash
+                    AND IsRevoked = 0 
+                    AND ExpiresAt > SYSUTCDATETIME()";
             return await conn.QueryFirstOrDefaultAsync<RefreshToken>(query, new { TokenHash= tokenHash });
         }
 

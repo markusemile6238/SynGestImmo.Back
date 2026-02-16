@@ -61,5 +61,7 @@ namespace Identity.Service.Infrastructure.Jwt
             var hash = sha.ComputeHash(Encoding.UTF8.GetBytes(token));
             return Convert.ToBase64String(hash);
         }
+
+      
     }
 }
