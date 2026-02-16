@@ -93,9 +93,9 @@ namespace Identity.Service.Infrastructure.Data.Repositories
         #endregion
 
         #region  GetRolesOfUserIdAsyn
-        public async Task<IEnumerable<Role>> GetRolesOfUserIdAsync(Guid id)
+        public async Task<IEnumerable<Role>> GetRolesOfUserIdAsync(Guid id, IDbConnection conn,IDbTransaction tx)
         {
-            using var connection = await _connection.CreateConnectionAsync();
+           
 
             const string sql = @"
                 SELECT 
@@ -112,9 +112,10 @@ namespace Identity.Service.Infrastructure.Data.Repositories
                   AND r.IsActive = 1;
             ";
 
-            return await connection.QueryAsync<Role>(
+            return await conn.QueryAsync<Role>(
                 sql,
-                new { userId = id }
+                new { userId = id },
+                tx
             );
         } 
         #endregion

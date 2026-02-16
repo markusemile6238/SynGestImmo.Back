@@ -47,67 +47,62 @@ namespace Identity.Service.Application.Features.Auth
                 return CqsResult<LoginResponseDto>.Failure(Error.Validation("Password is require"));
 
             #endregion
-            User user;
 
-            try
-            {
-                user = await _userRepo.GetUserByEmailAsync(request.Email);
-            }
-            catch (SqlException ex)
-            {
-                var error = _sqlHandler.Translate(ex);
-                return CqsResult<LoginResponseDto>.Failure(error);
-            }
+            bool loggedIn = false;
+            string accessToken = string.Empty;
+            string refreshToken = string.Empty;
+            bool mustChangePassword = false;
 
-
-            if (user == null || !user.IsActive)
-            {
-                return CqsResult<LoginResponseDto>.Failure(Error.Validation("Invalid credentials"));
-            }
-
-            if (!_passwordHasher.VerifyPassword(request.Password, user.PasswordHash))
-            {
-                return CqsResult<LoginResponseDto>.Failure(Error.Validation("Invalid credentials"));
-            }
-            ;
-
+            User? user;
             IEnumerable<Role> roles;
 
             try
             {
-                roles = await _rolesRepo.GetRolesOfUserIdAsync(user.Id);
-            }
+                await _unitOfWork.ExecuteAsync(async (conn, tx) =>
+                {
 
+                    user = await _userRepo.GetUserByEmailAsync(request.Email, conn, tx);
+
+                    if (user == null || !user.IsActive)
+                        return;
+
+                    if (!_passwordHasher.VerifyPassword(request.Password, user.PasswordHash))
+                    {
+                        return;
+                    }
+
+                    roles = await _rolesRepo.GetRolesOfUserIdAsync(user.Id, conn, tx);
+
+                    accessToken = _tokenService.GenerateAccessToken(user, roles.Select(r => r.Name));
+                    refreshToken = _tokenService.GenerateRefreshToken();
+                    var refreshHash = _tokenService.HashToken(refreshToken);
+
+                    await _refreshTokenRepo.AddAsync(new RefreshToken
+                    {
+                        Id = Guid.NewGuid(),
+                        UserId = user.Id,
+                        TokenHash = refreshHash,
+                        CreatedAt = DateTime.UtcNow,
+                        ExpiresAt = DateTime.UtcNow.AddDays(7),
+                        IsRevoked = false
+                    }, conn, tx);
+
+                    mustChangePassword = user.MustChangePassword;
+                    loggedIn = true;
+
+                });
+
+                if (!loggedIn)
+                {
+                    return CqsResult<LoginResponseDto>.Failure(Error.Validation("Credentials error"));
+                }
+                return CqsResult<LoginResponseDto>.Success(new LoginResponseDto(accessToken, refreshToken, mustChangePassword));
+            }
             catch (SqlException ex)
             {
                 var error = _sqlHandler.Translate(ex);
                 return CqsResult<LoginResponseDto>.Failure(error);
             }
-
-            var accessToken = _tokenService.GenerateAccessToken(user,roles.Select(r=>r.Name));
-
-
-            var refreshToken = _tokenService.GenerateRefreshToken();
-            var refreshHash = _tokenService.HashToken(refreshToken);
-
-            var tokenEntity = new RefreshToken
-            {
-                Id = Guid.NewGuid(),
-                UserId = user.Id,
-                TokenHash = refreshHash,
-                CreatedAt = DateTime.UtcNow,
-                ExpiresAt = DateTime.UtcNow.AddDays(7),
-                IsRevoked = false
-            };
-
-            await _unitOfWork.ExecuteAsync(async (conn, tx) =>
-            {
-                await _refreshTokenRepo.AddAsync(tokenEntity, conn, tx);
-            });
-
-            return CqsResult<LoginResponseDto>.Success(new LoginResponseDto(accessToken, refreshToken,user.MustChangePassword));
-
-
         }
     }
 }

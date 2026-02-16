@@ -19,6 +19,8 @@
 
         public static CqsError Unknown(string message)
             => new() { Code = "UNKNOWN_ERROR", Message = message, StatusCode = 500 };
+        public static CqsError Unauthorized(string message)
+            => new() { Code = "UNAUTHORIZED", Message = message, StatusCode = 401 };
         
        
 

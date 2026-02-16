@@ -18,13 +18,14 @@ namespace Identity.Service.Application.Features.Auth
         private readonly IUnitOfWork _unitOfWork;
         private readonly ISqlExceptionTranslator _sqlExceptionTranslator;
 
-        public LogoutHandler(ILogger<LogoutHandler> logger, IRefreshTokenCommandsRepository commandsRepository, IRefreshTokenQueriesRepository queriesRepository, ITokenService tokenService, IUnitOfWork unitOfWork)
+        public LogoutHandler(ILogger<LogoutHandler> logger, IRefreshTokenCommandsRepository commandsRepository, IRefreshTokenQueriesRepository queriesRepository, ITokenService tokenService, IUnitOfWork unitOfWork, ISqlExceptionTranslator sqlExceptionTranslator)
         {
             _logger = logger;
             _commandsRepository = commandsRepository;
             _queriesRepository = queriesRepository;
             _tokenService = tokenService;
             _unitOfWork = unitOfWork;
+            _sqlExceptionTranslator = sqlExceptionTranslator;
         }
 
         public async Task<CqsResult<bool>> Handle(LogoutCommand request, CancellationToken cancellationToken)
@@ -51,45 +52,24 @@ namespace Identity.Service.Application.Features.Auth
 
             try
             {
-                token = await _queriesRepository.GetByTokenHashAsync(hashed);
-
-                if (token == null)             
-                    return CqsResult<bool>.Failure(Error.Validation("Bad Token !"));            
-
-                if(token.IsRevoked)
-                    return CqsResult<bool>.Failure(Error.Validation("Token Revoked"));
-            }
-            catch (SqlException ex)
-            {
-                var error = _sqlExceptionTranslator.Translate(ex);
-                return CqsResult<bool>.Failure(error);
-            }
-
-
-            token.IsRevoked = true;
-            token.RevokedAt = DateTime.UtcNow;
-            try
-            {
-
                 await _unitOfWork.ExecuteAsync(async (conn, tx) =>
                 {
+                    token = await _queriesRepository.GetByTokenHashAsync(hashed, conn, tx);
+
+                    if (token == null || token.IsRevoked || token.ExpiresAt <= DateTime.UtcNow)
+                        return;
+
                     await _commandsRepository.RevokeAsync(token.Id, conn, tx);
                 });
+
+                return CqsResult<bool>.Success(true);
+
             }
             catch (SqlException ex)
             {
                 var error = _sqlExceptionTranslator.Translate(ex);
                 return CqsResult<bool>.Failure(error);
             }
-            catch (Exception ex) 
-            {
-              
-                return CqsResult<bool>.Failure(Error.Unknown(ex.Message));
-            }
-
-            return CqsResult<bool>.Success(true);
-
-
         }
     }
 }

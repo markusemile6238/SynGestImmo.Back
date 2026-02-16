@@ -45,10 +45,9 @@ namespace Identity.Service.Infrastructure.Data.Repositories
 
         #region QUERIES
 
-        public async Task<RefreshToken?> GetByTokenHashAsync(string tokenHash)
+        public async Task<RefreshToken?> GetByTokenHashAsync(string tokenHash,IDbConnection conn, IDbTransaction tx)
         {
             Console.WriteLine($"=====>{tokenHash}");
-            using var conn = await _connection.CreateConnectionAsync();
             const string query = @"
                     SELECT
                         Id,
@@ -62,7 +61,7 @@ namespace Identity.Service.Infrastructure.Data.Repositories
                     WHERE TokenHash = @TokenHash
                     AND IsRevoked = 0 
                     AND ExpiresAt > SYSUTCDATETIME()";
-            return await conn.QueryFirstOrDefaultAsync<RefreshToken>(query, new { TokenHash= tokenHash });
+            return await conn.QueryFirstOrDefaultAsync<RefreshToken>(query, new { TokenHash= tokenHash }, tx);
         }
 
         #endregion

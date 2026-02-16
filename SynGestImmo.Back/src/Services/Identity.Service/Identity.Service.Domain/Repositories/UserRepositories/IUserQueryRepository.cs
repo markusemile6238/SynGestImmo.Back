@@ -1,4 +1,5 @@
 ﻿using Identity.Service.Domaine.Entities;
+using System.Data;
 using Tools.Result;
 
 namespace Identity.Service.Infrastructure.Data.Repositories.UserRepositories
@@ -9,7 +10,8 @@ namespace Identity.Service.Infrastructure.Data.Repositories.UserRepositories
         //Queries
 
         Task<IEnumerable<User>> GetAllUserAsync();
-        Task<User?> GetUserByIdAsync(Guid id);
+        Task<User?> GetUserByIdAsync(Guid id, IDbConnection conn, IDbTransaction tx);
+        Task<User?> GetUserByEmailAsync(string email, IDbConnection conn, IDbTransaction tx);
         Task<User?> GetUserByEmailAsync(string email);
         Task<User?> GetUserByUserRefAsync(string userRef);
         Task<User?> GetUserByEntityIdAsync(Guid entityId);

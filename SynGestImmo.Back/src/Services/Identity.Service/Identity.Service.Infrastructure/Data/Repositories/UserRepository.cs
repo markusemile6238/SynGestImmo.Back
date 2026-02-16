@@ -1,12 +1,8 @@
 ﻿using Identity.Service.Domain.Exceptions;
 using Identity.Service.Domaine.Entities;
 using Identity.Service.Infrastructure.Data.Repositories.UserRepositories;
-using Identity.Service.Infrastructure.Handlers;
-using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Logging;
 using System.Data;
-using System.Web.Helpers;
-using Tools.Result;
 
 namespace Identity.Service.Infrastructure.Data.Repositories
 {
@@ -82,9 +78,9 @@ namespace Identity.Service.Infrastructure.Data.Repositories
         #endregion
 
         #region ChangePassword
-        public async Task<bool> ChangePassword(string oldPasswordHash, string newPasswordHash, string email)
+        public async Task<bool> ChangePassword(string oldPasswordHash, string newPasswordHash, string email, IDbConnection conn,IDbTransaction tx)
         {
-            using var connection = await _connection.CreateConnectionAsync();
+
             const string sql = @"
                 UPDATE Users 
                 SET 
@@ -92,13 +88,13 @@ namespace Identity.Service.Infrastructure.Data.Repositories
                     MustChangePassword = 0
                 WHERE Email = @Email AND PasswordHash = @OldPasswordHash";
 
-            var rowAffected = await connection.ExecuteAsync(sql, new
+            var rowAffected = await conn.ExecuteAsync(sql, new
             {
                 NewPasswordHash = newPasswordHash,
                 Email = email,
                 OldPasswordHash = oldPasswordHash,
                 
-            });
+            },tx);
 
             return rowAffected > 0;
         } 
@@ -144,6 +140,17 @@ namespace Identity.Service.Infrastructure.Data.Repositories
         #endregion
         
         #region GetUserByEmailAsync
+        public async Task<User?> GetUserByEmailAsync(string email,IDbConnection conn, IDbTransaction tx)
+        {
+   
+            var query = @"SELECT TOP(1) * FROM Users WHERE Email = @Email";
+            var user = await conn.QueryFirstOrDefaultAsync<User>(query, new { Email = email },tx);
+            return user;
+        }
+        #endregion
+        
+        #region GetUserByEmailAsync Simple
+
         public async Task<User?> GetUserByEmailAsync(string email)
         {
             var connection = await _connection.CreateConnectionAsync();
@@ -151,8 +158,9 @@ namespace Identity.Service.Infrastructure.Data.Repositories
             var user = await connection.QueryFirstOrDefaultAsync<User>(query, new { Email = email });
             return user;
         }
-        #endregion
 
+        #endregion
+        
         #region GetUserByEntityIdAs
         public async Task<User?> GetUserByEntityIdAsync(Guid entityId)
         {
@@ -164,9 +172,9 @@ namespace Identity.Service.Infrastructure.Data.Repositories
         #endregion
 
         #region GetUserById 
-        public async Task<User?> GetUserByIdAsync(Guid id)
+        public async Task<User?> GetUserByIdAsync(Guid id, IDbConnection conn,IDbTransaction tx)
         {
-            var connection = await _connection.CreateConnectionAsync();
+
             var query = @"
             SELECT 
                 Id,
@@ -179,7 +187,7 @@ namespace Identity.Service.Infrastructure.Data.Repositories
                 CreatedAt,
                 UpdatedAt
             FROM Users WHERE Id = @ID";
-            var user = await connection.QueryFirstOrDefaultAsync<User>(query, new { id });
+            var user = await conn.QueryFirstOrDefaultAsync<User>(query, new { id } , tx);
             return user;
         }
         #endregion
@@ -261,9 +269,9 @@ namespace Identity.Service.Infrastructure.Data.Repositories
             return user > 1;
         }
         #endregion
-       
 
-        
+
+
 
     }
 }
