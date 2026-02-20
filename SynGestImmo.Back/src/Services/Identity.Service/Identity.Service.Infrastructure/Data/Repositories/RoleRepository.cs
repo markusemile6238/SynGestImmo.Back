@@ -1,10 +1,8 @@
 ﻿using Identity.Service.Domain.Entities;
-using Identity.Service.Domain.Exceptions;
 using Identity.Service.Domain.Repositories.RoleRepositories;
 using Identity.Service.Infrastructure.Handlers;
-using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Logging;
-using Tools.Result;
+using System.Data;
 
 namespace Identity.Service.Infrastructure.Data.Repositories
 {
@@ -61,7 +59,7 @@ namespace Identity.Service.Infrastructure.Data.Repositories
         } 
         #endregion
 
-        #region GetRoleByIdAsynch
+        #region GetRoleByIdAsync
         public async Task<Role?> GetRoleByIdAsync(int id)
         {
 
@@ -70,6 +68,19 @@ namespace Identity.Service.Infrastructure.Data.Repositories
             var sql = @"SELECT Id,Name,Description,IsSystemRole,IsActive,Prefixe,CreatedAt,UpdatedAt FROM Roles WHERE Id=@Id AND IsActive=1";
 
             var role = await connection.QueryFirstOrDefaultAsync<Role>(sql, new { id });
+
+            return role;
+        } 
+        #endregion
+
+       
+        #region GetRoleByIdAsyncUnit
+        public async Task<Role?> GetRoleByIdAsync(int id,IDbConnection conn, IDbTransaction tx)
+        {
+
+            var sql = @"SELECT Id,Name,Description,IsSystemRole,IsActive,Prefixe,CreatedAt,UpdatedAt FROM Roles WHERE Id=@Id AND IsActive=1";
+
+            var role = await conn.QueryFirstOrDefaultAsync<Role>(sql, new { id },tx);
 
             return role;
         } 

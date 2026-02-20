@@ -31,5 +31,26 @@ namespace Identity.Service.Infrastructure.Data
                 throw;
             }
         }
+
+        public async Task<T> ExecuteAsync<T>(Func<IDbConnection, IDbTransaction, Task<T>> action)
+        {
+            using var connection = await _connection.CreateConnectionAsync();
+            
+            if(connection.State != ConnectionState.Open) connection.Open();
+
+            using var transaction = connection.BeginTransaction();
+
+            try
+            {
+                var result = await action(connection, transaction);
+                transaction.Commit();
+                return result;
+            }
+            catch
+            {
+                transaction.Rollback();
+                throw;
+            }
+        }
     }
 }

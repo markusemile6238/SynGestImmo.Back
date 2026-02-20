@@ -2,9 +2,9 @@
 using Identity.Service.Application.DTOS.Auth;
 using Identity.Service.Application.Features.Jwt;
 using Identity.Service.Domain.Entities;
+using Identity.Service.Domain.Repositories.UserRepositories;
 using Identity.Service.Domain.Repositories.UserRolesRepositories;
 using Identity.Service.Domaine.Entities;
-using Identity.Service.Infrastructure.Data.Repositories.UserRepositories;
 using MediatR;
 using Microsoft.Data.SqlClient;
 using Tools.Result;

@@ -2,7 +2,6 @@
 using Identity.Service.Application.DTOS.Jwt;
 using Identity.Service.Application.Features.Auth;
 using Identity.Service.Application.Features.Jwt;
-using Identity.Service.Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -27,24 +26,12 @@ namespace Identity.Service.API.Controllers
         }
 
 
-        //[HttpGet("debug")]
-        //public IActionResult DebugAuth()
-        //{
-        //    return Ok(new
-        //    {
-        //        IsAuthenticated = User.Identity?.IsAuthenticated,
-        //        Name = User.Identity?.Name,
-        //        Claims = User.Claims.Select(c => new { c.Type, c.Value })
-        //    });
-        //}
-
-
         #region LOGIN
 
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDto dto)
         {
-            _logger.LogInformation("DTO reçu: {@dto}", dto);
+            
             if (dto == null)
                 return BadRequest(CqsResult.Failure(Error.Validation("Request body is missing or invalid JSON")));
 

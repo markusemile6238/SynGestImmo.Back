@@ -1,10 +1,7 @@
-﻿using Identity.Service.Domain.Entities;
-using Identity.Service.Domain.Exceptions;
-using Identity.Service.Domain.Repositories.RoleRepositories;
-using Identity.Service.Infrastructure.Data.Repositories.UserRepositories;
+﻿using Identity.Service.Domain.Repositories.RoleRepositories;
+using Identity.Service.Domain.Repositories.UserRepositories;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Tools.Result;
 
 namespace Identity.Service.Application.Features.UserFeature.Services
 {
@@ -23,13 +20,12 @@ namespace Identity.Service.Application.Features.UserFeature.Services
             _config = configuration;
         }
 
-        public async Task<string> GenerateAsync(int roleId, int? year)
+        public async Task<string> GenerateAsync(int roleId, int? year=null)
         {
     
 
             var  roleResult = await _roleRepository.GetRoleByIdAsync(roleId);
 
-            _logger.LogInformation($"====>{roleResult.Prefixe}");
 
             //  LKIO-1-SU-2026-65123
 
@@ -37,7 +33,7 @@ namespace Identity.Service.Application.Features.UserFeature.Services
 
             string timestamp = DateTimeOffset.Now.ToUnixTimeMilliseconds().ToString();
 
-            return String.Concat(prefixSyndic,"-",roleResult.Id,"-",roleResult.Prefixe,"-",timestamp); 
+            return String.Concat(prefixSyndic,"-",roleResult!.Id,"-",roleResult.Prefixe,"-",timestamp); 
 
 
         }

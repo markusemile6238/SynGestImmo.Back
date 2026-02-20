@@ -1,24 +1,21 @@
 ﻿using Identity.Service.Domain.Exceptions;
 using Identity.Service.Domaine.Entities;
-using Identity.Service.Infrastructure.Data.Repositories.UserRepositories;
+using Identity.Service.Domain.Repositories.UserRepositories;
 using Microsoft.Extensions.Logging;
 using System.Data;
+using Identity.Service.Infrastructure.Data;
 
 namespace Identity.Service.Infrastructure.Data.Repositories
 {
-    public class UserRepository : IUserCommandRepository, IUserQueryRepository
+    public class UserRepository (
+        IDapperConnection connectionDapper,
+        ILogger<UserRepository> logger
+     ) : IUserCommandRepository, IUserQueryRepository
     {
-        private readonly IDapperConnection _connection;
-        private readonly ILogger<UserRepository> _logger;
+        private readonly IDapperConnection _connection = connectionDapper;
+        private readonly ILogger<UserRepository> _logger = logger;
 
-        public UserRepository(
-            IDapperConnection connectionDapper,
-            ILogger<UserRepository> logger
-            )
-        {
-            _connection = connectionDapper;
-            _logger = logger;
-        }
+
 
         public Task<bool> ActivateUserAsync(Guid userId)
         {
@@ -32,18 +29,14 @@ namespace Identity.Service.Infrastructure.Data.Repositories
         {
 
             user.Id = Guid.NewGuid(); // creation officel de l'id
-            //using var connection = await _connection.CreateConnectionAsync();
 
             const string sql = @"
-                INSERT INTO Users (Id, Email, PasswordHash, UserRef, EntityId, MainRoleId, IsActive, CreatedAt)            
-                VALUES (@Id, @Email, @PasswordHash, @UserRef, @EntityId, @MainRoleId, @IsActive, @CreatedAt)
+                INSERT INTO Users (Id, Username, Email, PasswordHash, UserRef, EntityId, MainRoleId, IsActive, CreatedAt)            
+                VALUES (@Id, @Username, @Email, @PasswordHash, @UserRef, @EntityId, @MainRoleId, @IsActive, @CreatedAt)
                 ;";
-
 
             int rowAffected = await connection.ExecuteAsync(sql, user, transaction);
 
-
-            //await AssignRoleIdAsync(user.MainRoleId, newId);
 
             if (rowAffected != 1)
                 throw new IdentityServiceException("Insert user Failed");
@@ -56,18 +49,18 @@ namespace Identity.Service.Infrastructure.Data.Repositories
     
         #region AssignRolesToUserAsynch
 
-        public async Task<bool> AssignRoleIdAsync(int roleId, Guid userId)
+        public async Task<bool> AssignRoleIdAsync(int Id, Guid userId)
         {
 
                 using var connection = await _connection.CreateConnectionAsync();
                 const string sql = @"
                     UPDATE Users 
-                    SET MainRoleId =  @roleId
+                    SET MainRoleId =  @Id
                     WHERE Id = @userId";
                 
                 var rowAffected = await connection.ExecuteAsync(sql, new 
                 { 
-                    roleId,
+                    Id,
                     userId 
                 });
 
@@ -117,10 +110,11 @@ namespace Identity.Service.Infrastructure.Data.Repositories
 
             return row > 0;
 
-        } 
+        }
         #endregion
 
 
+   
 
         // queries
 
@@ -131,7 +125,7 @@ namespace Identity.Service.Infrastructure.Data.Repositories
         {
             var connection = await _connection.CreateConnectionAsync();
             var query = @"
-                    SELECT Id, Email, UserRef, MainRoleId, IsActive, CreatedAt, UpdatedAt  
+                    SELECT Id, Username,Email, UserRef, MainRoleId, IsActive, CreatedAt, UpdatedAt  
                     FROM Users";
             var users = await connection.QueryAsync<User>(query);
             return users;
@@ -225,20 +219,41 @@ namespace Identity.Service.Infrastructure.Data.Repositories
         #region UpdateUserAsync
         public async Task<bool> UpdateUserAsync(User user)
         {
+
             using var connection = await _connection.CreateConnectionAsync();
             const string command = @"
                 UPDATE Users 
                 SET 
+                    Username = @Username,
                     Email = @Email,
-                    PasswordHash = @PasswordHash,
-                    UserRef = @UserRef,
-                    EntityId = @EntityId,
                     MainRoleId = @MainRoleId,
                     IsActive = @IsActive,
                     UpdatedAt = @UpdatedAt
                 WHERE Id = @Id";
 
             var result = await connection.ExecuteAsync(command, user);
+            return result == 1;
+
+        }
+        #endregion
+
+        #region UpdateUserAsyncUnit
+        public async Task<bool> UpdateUserAsync(User user, IDbConnection conn,IDbTransaction tx)
+        {
+
+            const string command = @"
+                UPDATE Users 
+                SET 
+                    Username = @Username,
+                    Email = @Email,
+                    MainRoleId = @MainRoleId,
+                    IsActive = @IsActive,
+                    UpdatedAt = @UpdatedAt
+                WHERE Id = @Id";
+
+
+            var result = await conn.ExecuteAsync(command,user,tx);
+
             return result == 1;
 
         }

@@ -8,6 +8,7 @@ using Tools.Result;
 using Identity.Service.API.Extensions;
 using Identity.Service.Application.Features.UserFeature.Queries.GetAllUser;
 using Microsoft.AspNetCore.Authorization;
+using Identity.Service.Application.Features.UserFeature.Commands.UpdateUser;
 
 namespace Identity.Service.API.Controllers
 {
@@ -32,30 +33,32 @@ namespace Identity.Service.API.Controllers
 
         [HttpGet]
         [Route("All")]
-        public async Task<IActionResult> GetAllAsync()
+        public async Task<ActionResult> GetAllAsync()
         {
             var query = new GetAllUserQuery();
             var result = await _mediator.Send(query);
             return Ok(result);
         }
 
+        #region CREATEUSER
         [HttpPost]
         public async Task<IActionResult> CreateUserAsync([FromBody] CreateUserDto dto)
         {
 
-            if (!ModelState.IsValid) {
+            if (!ModelState.IsValid)
+            {
                 var errors = ModelState
-                    .Where(e => e.Value.Errors.Count > 0)
+                    .Where(e => e.Value!.Errors.Count > 0)
                     .ToDictionary(
                         kvp => kvp.Key,
-                        kvp => kvp.Value.Errors.Select(e=>e.ErrorMessage).ToArray()
+                        kvp => kvp.Value!.Errors.Select(e => e.ErrorMessage).ToArray()
                     );
                 return BadRequest(
                     CqsResult.Failure(
-                        Error.Validation("Invalid request data",errors
+                        Error.Validation("Invalid request data", errors
                         )
                      )
-                    );                    
+                    );
             }
 
             _logger.LogInformation("Creation of new user");
@@ -69,31 +72,57 @@ namespace Identity.Service.API.Controllers
             };
 
             var result = await _mediator.Send(command);
-           
-            return result.ToActionResult();        
-        }
 
+            return result.ToActionResult();
+        }
+        #endregion
+
+        #region GETUSERBYEMAIL
         [HttpGet]
-        public async Task<CqsResult> GetUserByEmail([FromBody] GetUserByEmailDto dto)
+        public async Task<ActionResult<CqsResult>> GetUserByEmail([FromBody] GetUserByEmailDto dto)
         {
             if (!ModelState.IsValid)
                 return CqsResult.Failure(Error.Validation("Email not valid. Please try with a correct email address"));
 
-            var query = new GetUserByEmailQuery{ Email= dto.Email };
+            var query = new GetUserByEmailQuery { Email = dto.Email };
             var result = await _mediator.Send(query);
-            return result;
+            return Ok(result);
         }
+        #endregion
 
+        #region DELETEUSER
         [HttpDelete]
-        public async Task<CqsResult> DeleteUserById([FromBody] DeleteUserDto dto)
+        public async Task<ActionResult<CqsResult>> DeleteUserById([FromBody] DeleteUserDto dto)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
                 return CqsResult.Failure(Error.Validation("Id not valid. Please check the value and the type"));
 
             var command = new DeleteUserCommand { Id = dto.Id };
             var result = await _mediator.Send(command);
-            return result;
+            return Ok(result);
 
-        } 
+        }
+        #endregion
+
+        [HttpPut]
+        public async Task<ActionResult<CqsResult>> UpdateUser([FromBody] UpdateUserDto dto)
+        {
+
+
+            if (!ModelState.IsValid)
+                return CqsResult.Failure(Error.Validation("Invalid Request"));
+            var command = new UpdateUserCommand
+            {
+                Id = dto.Id,
+                Username = dto.Username,
+                Email = dto.Email,
+                
+                MainRoleId = dto.RoleId 
+                
+            };
+            var result = await _mediator.Send(command);
+            return Ok(result);
+        }
+        
     }
 }

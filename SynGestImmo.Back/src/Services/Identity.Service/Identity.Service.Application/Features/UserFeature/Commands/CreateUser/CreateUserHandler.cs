@@ -2,9 +2,9 @@
 using Identity.Service.Application.Features.UserFeature.Services;
 using Identity.Service.Domain.Entities;
 using Identity.Service.Domain.Repositories.RoleRepositories;
+using Identity.Service.Domain.Repositories.UserRepositories;
 using Identity.Service.Domain.Repositories.UserRolesRepositories;
 using Identity.Service.Domaine.Entities;
-using Identity.Service.Infrastructure.Data.Repositories.UserRepositories;
 using MediatR;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Logging;
@@ -15,40 +15,23 @@ namespace Identity.Service.Application.Features.UserFeature.Commands.CreateUser
 {
     public class CreateUserHandler : IRequestHandler<CreateUserCommand, CqsResult>
     {
-        private readonly IUserCommandRepository _commandRepository;
-        private readonly IRolesQueryRepository _rolesQueryRepository;
-        private readonly ILogger<CreateUserHandler> _logger;
-        private readonly IUserReferenceService _userReferenceService;
-        private readonly IPasswordHasher _passwordHasher;
-        private readonly ISqlExceptionTranslator _sqlHandler;
+        private readonly IUserCreator _userCreator;
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IUserRolesCommandRepository _userRoleCommandRepo;
+        private readonly ILogger<CreateUserHandler> _logger;
+        private readonly ISqlExceptionTranslator _sqlTranslator;
 
-        public CreateUserHandler(
-            IUserCommandRepository commandRepository,
-            ILogger<CreateUserHandler> logger,
-            IUserReferenceService userReferenceService,
-            IPasswordHasher passwordHasher,
-            IRolesQueryRepository rolesQueryRepository,
-            IUserRolesCommandRepository userRolesCommandRepository,
-            ISqlExceptionTranslator sqlHandler,
-            IUnitOfWork unitOfWork
-
-        )
+        public CreateUserHandler(IUserCreator userCreator, IUnitOfWork unitOfWork, ILogger<CreateUserHandler> logger, ISqlExceptionTranslator sqlTranslator)
         {
-            _commandRepository = commandRepository;
-            _logger = logger;
-            _userReferenceService = userReferenceService;
-            _passwordHasher = passwordHasher;
-            _rolesQueryRepository = rolesQueryRepository;
-            _sqlHandler = sqlHandler;
+            _userCreator = userCreator;
             _unitOfWork = unitOfWork;
-            _userRoleCommandRepo = userRolesCommandRepository;
+            _logger = logger;
+            _sqlTranslator = sqlTranslator;
         }
 
         public async Task<CqsResult> Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
-            // validations
+
+            #region VALIDATIONS
             if (string.IsNullOrEmpty(request.Email))
                 return CqsResult.Failure(Error.Validation("Email is require"));
 
@@ -57,51 +40,31 @@ namespace Identity.Service.Application.Features.UserFeature.Commands.CreateUser
 
             if (request.RoleId <= 0)
                 return CqsResult.Failure(Error.Validation("Role ID is required"));
+            #endregion
 
-            // check role existence
-            Role? role;
-            try
-            {
-                role = await _rolesQueryRepository.GetRoleByIdAsync(request.RoleId);
-            }
-            catch (SqlException ex)
-            {
-                var error = _sqlHandler.Translate(ex);
-                return CqsResult.Failure(error);
-            }
 
-            if(role == null)
-                return CqsResult.Failure(Error.NotFound("Role does not exist"));
 
             try
             {
-
-                User u = new User
+                var result = await _unitOfWork.ExecuteAsync(async (conn, tx) =>
                 {
-                    Email = request.Email,
-                    PasswordHash = _passwordHasher.HashPassword(request.Password),
-                    MainRoleId = role.Id,
-                    EntityId = Guid.NewGuid(), // va servir de id dans owner/logger ou employee
-                    UserRef = await _userReferenceService.GenerateAsync(role.Id), // reference de l'utilisateur dans la transcription de l'application
-                    CreatedAt = DateTime.UtcNow
-                };
-
-                
-
-                await _unitOfWork.ExecuteAsync(async (connection, transaction) =>
-                {
-                    var userId = await _commandRepository.CreateUserAsync(u, connection, transaction);
-                    await _userRoleCommandRepo.AssignRoleToUserAsync(userId, u.MainRoleId, connection, transaction);
+                    return await _userCreator.CreateUserAsync(request, conn, tx);
                 });
 
-                _logger.LogInformation("New User Create successfully");
+                if (result.IsSuccess)
+                    _logger.LogInformation("User {Email} created successfully", request.Email);
+                
+                return result;
 
-                return CqsResult.Success("New user created successfully");
-            
+
+
+
+
+
             }
             catch (SqlException ex)
             {
-                var error = _sqlHandler.Translate(ex);
+                var error = _sqlTranslator.Translate(ex);
                 return CqsResult.Failure(error);
             }
             catch (DataException ex)

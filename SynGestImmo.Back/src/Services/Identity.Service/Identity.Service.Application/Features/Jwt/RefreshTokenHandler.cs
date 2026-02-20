@@ -1,11 +1,10 @@
 ﻿using Identity.Service.Application.Common;
 using Identity.Service.Application.DTOS.Auth;
+using Identity.Service.Domain.Repositories.UserRepositories;
 using Identity.Service.Domain.Repositories.UserRolesRepositories;
 using Identity.Service.Domaine.Entities;
-using Identity.Service.Infrastructure.Data.Repositories.UserRepositories;
 using MediatR;
 using Microsoft.Data.SqlClient;
-using Microsoft.Extensions.Logging;
 using Tools.Result;
 using RError = Tools.Result.Error;
 

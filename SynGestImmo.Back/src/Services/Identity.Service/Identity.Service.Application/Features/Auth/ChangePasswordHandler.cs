@@ -1,6 +1,5 @@
 ﻿using Identity.Service.Application.Common;
-using Identity.Service.Domaine.Entities;
-using Identity.Service.Infrastructure.Data.Repositories.UserRepositories;
+using Identity.Service.Domain.Repositories.UserRepositories;
 using MediatR;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Logging;

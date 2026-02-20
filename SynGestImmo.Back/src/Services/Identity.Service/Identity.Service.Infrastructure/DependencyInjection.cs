@@ -1,15 +1,16 @@
 ﻿using Identity.Service.Application.Common;
 using Identity.Service.Application.Features.Jwt;
 using Identity.Service.Domain.Repositories.RoleRepositories;
+using Identity.Service.Domain.Repositories.UserRepositories;
 using Identity.Service.Domain.Repositories.UserRolesRepositories;
 using Identity.Service.Infrastructure.Data;
 using Identity.Service.Infrastructure.Data.Repositories;
-using Identity.Service.Infrastructure.Data.Repositories.UserRepositories;
 using Identity.Service.Infrastructure.Handlers;
 using Identity.Service.Infrastructure.Services;
+using Microsoft.Extensions.DependencyInjection;
 
 
-namespace Microsoft.Extensions.DependencyInjection
+namespace Identity.Service.Infrastructure
 {
     public static class DependencyInjection
     {
@@ -45,7 +46,9 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             
-            services.AddScoped<IDapperConnection, DapperContext>(); 
+            services.AddScoped<IDapperConnection, DapperContext>();
+
+            services.AddScoped<IUserCreator, UserCreatorService>();
 
 
 

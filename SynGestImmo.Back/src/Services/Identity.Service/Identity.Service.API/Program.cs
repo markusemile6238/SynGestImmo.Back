@@ -1,6 +1,7 @@
 using Identity.Service.API.Handler;
 using Identity.Service.Application;
 using Identity.Service.Application.Common;
+using Identity.Service.Infrastructure;
 using Identity.Service.Infrastructure.Handlers;
 using Identity.Service.Infrastructure.Jwt;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -90,9 +91,9 @@ internal class Program
             {
                 policy
                     .WithOrigins("http://localhost:4200")
-                    .AllowCredentials()
                     .AllowAnyHeader()
-                    .AllowAnyMethod();
+                    .AllowAnyMethod()
+                    .AllowCredentials();
             });
         });
 

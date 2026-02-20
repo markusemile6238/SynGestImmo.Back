@@ -26,6 +26,7 @@ namespace Identity.Service.Infrastructure.Jwt
                new Claim(JwtRegisteredClaimNames.Email,user.Email),
                new Claim("mustChangePassword",user.MustChangePassword.ToString().ToLower()),
                new Claim("userRef",user.UserRef),
+               new Claim("username",user.Username),
                new Claim("entityId",user.EntityId.ToString())
 
            };

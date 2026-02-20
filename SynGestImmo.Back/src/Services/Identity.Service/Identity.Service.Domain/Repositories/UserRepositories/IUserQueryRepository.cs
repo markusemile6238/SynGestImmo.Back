@@ -2,7 +2,7 @@
 using System.Data;
 using Tools.Result;
 
-namespace Identity.Service.Infrastructure.Data.Repositories.UserRepositories
+namespace Identity.Service.Domain.Repositories.UserRepositories
 
 {
     public interface IUserQueryRepository

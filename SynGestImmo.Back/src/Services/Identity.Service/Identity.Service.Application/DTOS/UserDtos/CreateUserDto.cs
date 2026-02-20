@@ -9,7 +9,7 @@ namespace Identity.Service.Application.DTOS.UserDtos
 {
     public class CreateUserDto
     {
-
+        public string Username { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
         public int RoleId { get; set; } = 0;
@@ -20,6 +20,7 @@ namespace Identity.Service.Application.DTOS.UserDtos
     public class CreateUserResponseDto
     {
         public Guid Id { get; set; }
+        public string Username { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
         public int RoleId { get; set; }
         public string RoleName { get; set; } = string.Empty;

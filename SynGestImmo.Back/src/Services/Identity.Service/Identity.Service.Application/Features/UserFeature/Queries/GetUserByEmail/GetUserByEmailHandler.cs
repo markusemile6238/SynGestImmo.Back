@@ -1,16 +1,10 @@
 ﻿using Identity.Service.Application.Common;
+using Identity.Service.Domain.Repositories.UserRepositories;
 using Identity.Service.Domain.Repositories.UserRolesRepositories;
 using Identity.Service.Domaine.Entities;
-using Identity.Service.Infrastructure.Data.Repositories.UserRepositories;
 using MediatR;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Data.Common;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Tools.Result;
 
 namespace Identity.Service.Application.Features.UserFeature.Queries.GetUserByEmail
@@ -19,13 +13,12 @@ namespace Identity.Service.Application.Features.UserFeature.Queries.GetUserByEma
     {
         private readonly IUserQueryRepository _userQueryRepository;
         private readonly IUserRolesCommandRepository _userRoleCommandRepo;
-        private readonly ILogger<GetUserByEmailHandler> _logger;
         private readonly ISqlExceptionTranslator _sqlHandler;
 
-        public GetUserByEmailHandler(IUserQueryRepository userQueryRepository, ILogger<GetUserByEmailHandler> logger, ISqlExceptionTranslator sqlHandler,IUserRolesCommandRepository userRolesCommandRepository)
+        public GetUserByEmailHandler(IUserQueryRepository userQueryRepository, ISqlExceptionTranslator sqlHandler,IUserRolesCommandRepository userRolesCommandRepository)
         {
             _userQueryRepository = userQueryRepository;
-            _logger = logger;
+
             _sqlHandler = sqlHandler;
             _userRoleCommandRepo = userRolesCommandRepository;
         }
