@@ -125,7 +125,7 @@ namespace Identity.Service.Infrastructure.Data.Repositories
         {
             var connection = await _connection.CreateConnectionAsync();
             var query = @"
-                    SELECT Id, Username,Email, UserRef, MainRoleId, IsActive, CreatedAt, UpdatedAt  
+                    SELECT Id, Username,Email, UserRef, MainRoleId, MustChangePassword, IsActive, CreatedAt, UpdatedAt  
                     FROM Users";
             var users = await connection.QueryAsync<User>(query);
             return users;

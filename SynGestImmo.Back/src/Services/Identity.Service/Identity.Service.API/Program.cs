@@ -90,7 +90,8 @@ internal class Program
             opts.AddPolicy("Frontend", policy =>
             {
                 policy
-                    .WithOrigins("http://localhost:4200")
+
+                    .WithOrigins("https://localhost:4200")
                     .AllowAnyHeader()
                     .AllowAnyMethod()
                     .AllowCredentials();
@@ -107,8 +108,10 @@ internal class Program
         {
             app.MapOpenApi();
         }
-        app.UseCors("Frontend");
         app.UseHttpsRedirection();                
+        
+        app.UseCors("Frontend");
+
         app.UseAuthentication();
         app.UseAuthorization();
 

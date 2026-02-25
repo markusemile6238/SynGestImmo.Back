@@ -38,7 +38,7 @@ namespace Identity.Service.Infrastructure.Data
                 _logger.LogInformation("Connection open");
                 return connection;
             }
-            catch (SqlException ex) when (ex.Number == 4060) // database not found
+            catch (SqlException ex) when (ex.Number == 4060) // database not found  
             {
                 _logger.LogError($"Error sql connection : {ex.Message}\n Sql Error Number: : {ex.Number}");
                 throw new IdentityServiceException("DATABASE_CONNECTION_FAILED", "cannot connect to database",500);
