@@ -10,13 +10,17 @@ namespace Entity.Service.API.Controllers
     [Authorize(Policy = "PasswordChanged")]
     [Consumes("application/json")] // Accepter JSON
     [Produces("application/json")] // Retourner JSON
-    public class EntitySgiController : Controller
+    public class EntitySgiController : ControllerBase
     {
 
+        /// <summary>
+        /// [HttpPost]
+        ///[Route("/new")]
+        ///public void  CreateNewEntity()
+        ///{
 
-        [HttpPost]
-        [Route("/new")]
-        public Task<IActionResult> CreateNewEntity([FromBody] )
+        ///}
+        /// </summary>
 
     }
 }

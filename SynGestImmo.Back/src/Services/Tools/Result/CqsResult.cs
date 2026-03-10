@@ -37,7 +37,7 @@ namespace Tools.Result
 
         public static CqsResult<T> Success(T data)
             => new() { IsSuccess = true, StatusCode = 200, Data = data };
-        public static CqsResult<T> Success(string message)
+        public static CqsResult<T> Success(string message="success")
             => new() { IsSuccess = true, StatusCode = 200, Message=message };
         public static CqsResult<T> Failure(CqsError error)
             => new() { IsSuccess = false, StatusCode = error.StatusCode, Error = error };
@@ -46,9 +46,9 @@ namespace Tools.Result
 
     public class CqsError
     {
-        public string Code { get; init; }
-        public string Message { get; init; }
-        public int StatusCode { get; init; }
+        public string Code { get; init; } = string.Empty;
+        public string Message { get; init; } = string.Empty;
+        public int StatusCode { get; init; }    
         public Object? Details { get; init; }
     }
 }
