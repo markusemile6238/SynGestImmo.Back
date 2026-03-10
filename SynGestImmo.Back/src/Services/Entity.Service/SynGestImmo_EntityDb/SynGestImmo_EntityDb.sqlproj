@@ -3,16 +3,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <Name>SynGestImmo_IdentityDb</Name>
+    <Name>SynGestImmo_EntityDb</Name>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectVersion>4.1</ProjectVersion>
-    <ProjectGuid>{fddaf524-6474-4e32-9cbf-8579faa32828}</ProjectGuid>
+    <ProjectGuid>{23ba18c7-e5e7-47c8-8581-4556934a481d}</ProjectGuid>
     <DSP>Microsoft.Data.Tools.Schema.Sql.Sql150DatabaseSchemaProvider</DSP>
     <OutputType>Database</OutputType>
     <RootPath>
     </RootPath>
-    <RootNamespace>SynGestImmo_IdentityDb</RootNamespace>
-    <AssemblyName>SynGestImmo_IdentityDb</AssemblyName>
+    <RootNamespace>SynGestImmo_EntityDb</RootNamespace>
+    <AssemblyName>SynGestImmo_EntityDb</AssemblyName>
     <ModelCollation>1033, CI</ModelCollation>
     <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
     <DeployToDatabase>True</DeployToDatabase>
@@ -22,7 +22,9 @@
     <SqlServerVerification>False</SqlServerVerification>
     <IncludeCompositeObjects>True</IncludeCompositeObjects>
     <TargetDatabaseSet>True</TargetDatabaseSet>
-    <DefaultSchema>entity</DefaultSchema>
+    <DefaultSchema>dbo</DefaultSchema>
+    <IncludeSchemaNameInFileName>False</IncludeSchemaNameInFileName>
+    <DelayedDurability>DISABLED</DelayedDurability>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>bin\Release\</OutputPath>
@@ -58,27 +60,15 @@
   <ItemGroup>
     <Folder Include="Properties" />
     <Folder Include="Entities" />
-    <Folder Include="Index" />
-    <Folder Include="Procedures" />
-    <Folder Include="Data" />
-    <Folder Include="Views" />
   </ItemGroup>
   <ItemGroup>
-    <Build Include="Entities\Roles.sql" />
-    <Build Include="Entities\Users.sql" />
-    <Build Include="Index\Index.sql" />
-    <Build Include="Entities\UserRoles.sql" />
-    <Build Include="Entities\PasswordResets.sql" />
-    <Build Include="Entities\AuditLogs.sql" />
-    <Build Include="Procedures\Procedure1.sql" />
-    <Build Include="Views\RolesList.sql" />
-    <Build Include="Entities\Permissions.sql" />
-    <Build Include="Entities\RolePermissions.sql" />
-    <Build Include="Entities\RefreshTokens.sql" />
-  </ItemGroup>
-  <ItemGroup>
-    <PostDeploy Include="Data\InsertRoles.sql" />
-    <None Include="Data\InsertPermissions.sql" />
-    <None Include="Data\AssignPermission.sql" />
+    <Build Include="Entities\Entities.sql" />
+    <Build Include="Entities\Owners.sql" />
+    <Build Include="Entities\Persons.sql" />
+    <Build Include="Entities\Companies.sql" />
+    <Build Include="Entities\Tenants.sql" />
+    <Build Include="Entities\Addresses.sql" />
+    <Build Include="Entities\EntityAddresses.sql" />
+    <Build Include="Entities\Contacts.sql" />
   </ItemGroup>
 </Project>

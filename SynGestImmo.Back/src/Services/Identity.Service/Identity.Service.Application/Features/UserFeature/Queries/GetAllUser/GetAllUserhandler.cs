@@ -63,7 +63,7 @@ namespace Identity.Service.Application.Features.UserFeature.Queries.GetAllUser
                         IsEmailConfirmed = user.IsEmailConfirmed(),
                         EntityId = user.EntityId,
                         RoleId = user.MainRoleId,
-                        RoleName = roles.FirstOrDefault(r => r.Id == user.MainRoleId)?.Name ?? "Unknown",
+                        RoleName = roles.FirstOrDefault(r => r.Id == user.MainRoleId)?.Prefixe ?? "Unknown",
                         CreatedAt = user.CreatedAt,
                         UpdatedAt = user.UpdatedAt
                     };

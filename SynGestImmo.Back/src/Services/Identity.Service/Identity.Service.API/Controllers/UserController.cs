@@ -9,11 +9,12 @@ using Identity.Service.API.Extensions;
 using Identity.Service.Application.Features.UserFeature.Queries.GetAllUser;
 using Microsoft.AspNetCore.Authorization;
 using Identity.Service.Application.Features.UserFeature.Commands.UpdateUser;
+using Identity.Service.Application.Features.UserFeature.Queries.GetUserById;
 
 namespace Identity.Service.API.Controllers
 {
 
-    [Route("api/auth/admin/user")] 
+    [Route("api/admin/user")] 
     [ApiController]
     [Authorize(Policy = "PasswordChanged")]
     [Consumes("application/json")] // Accepter JSON
@@ -31,6 +32,7 @@ namespace Identity.Service.API.Controllers
 
 
 
+        #region GET ALL
         [HttpGet]
         [Route("All")]
         public async Task<ActionResult> GetAllAsync()
@@ -38,7 +40,8 @@ namespace Identity.Service.API.Controllers
             var query = new GetAllUserQuery();
             var result = await _mediator.Send(query);
             return Ok(result);
-        }
+        } 
+        #endregion
 
         #region CREATEUSER
         [HttpPost]
@@ -79,7 +82,7 @@ namespace Identity.Service.API.Controllers
 
         #region GETUSERBYEMAIL
         [HttpGet]
-        public async Task<ActionResult<CqsResult>> GetUserByEmail([FromBody] GetUserByEmailDto dto)
+        public async Task<ActionResult<CqsResult>> GetUserByEmail( GetUserByEmailDto dto)
         {
             if (!ModelState.IsValid)
                 return CqsResult.Failure(Error.Validation("Email not valid. Please try with a correct email address"));
@@ -88,6 +91,20 @@ namespace Identity.Service.API.Controllers
             var result = await _mediator.Send(query);
             return Ok(result);
         }
+        #endregion  
+
+        #region GETUSERBYId
+        [HttpGet]
+        [Route("detail/{id}")]
+        public async Task<ActionResult<CqsResult>> GetUserById(string id)
+        {
+            if (!ModelState.IsValid)
+                return CqsResult.Failure(Error.Validation("Id not valid."));
+
+            var query = new GetUserByIdQuery { Id = id };
+            var result = await _mediator.Send(query);
+            return Ok(result);
+        }   
         #endregion
 
         #region DELETEUSER
@@ -103,6 +120,9 @@ namespace Identity.Service.API.Controllers
 
         }
         #endregion
+
+       
+
 
         [HttpPut]
         public async Task<ActionResult<CqsResult>> UpdateUser([FromBody] UpdateUserDto dto)
@@ -124,5 +144,7 @@ namespace Identity.Service.API.Controllers
             return Ok(result);
         }
         
+
+
     }
 }

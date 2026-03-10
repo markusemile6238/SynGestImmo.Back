@@ -165,7 +165,7 @@ namespace Identity.Service.Infrastructure.Data.Repositories
         } 
         #endregion
 
-        #region GetUserById 
+        #region GetUserByIdAsyncUOW 
         public async Task<User?> GetUserByIdAsync(Guid id, IDbConnection conn,IDbTransaction tx)
         {
 
@@ -185,6 +185,29 @@ namespace Identity.Service.Infrastructure.Data.Repositories
             return user;
         }
         #endregion
+
+        #region GetUserByIdAsync
+        public async Task<User?> GetUserByIdAsync(Guid id)
+        {
+            var connection = await _connection.CreateConnectionAsync();
+            var query = @"
+            SELECT 
+                Id,
+                Email,
+                Username,
+                UserRef,
+                EntityId,
+                MainRoleId,
+                IsActive,
+                CreatedAt,
+                UpdatedAt
+            FROM Users WHERE Id = @ID";
+            var user = await connection.QueryFirstOrDefaultAsync<User>(query, new { id });
+            return user;
+        }
+        #endregion
+
+
 
         #region GetUserByRefreshTokenAsync
         public Task<User?> GetUserByRefreshTokenAsync(string refreshToken)

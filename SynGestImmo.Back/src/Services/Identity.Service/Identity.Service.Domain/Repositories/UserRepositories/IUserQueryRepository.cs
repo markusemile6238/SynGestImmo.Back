@@ -11,6 +11,7 @@ namespace Identity.Service.Domain.Repositories.UserRepositories
 
         Task<IEnumerable<User>> GetAllUserAsync();
         Task<User?> GetUserByIdAsync(Guid id, IDbConnection conn, IDbTransaction tx);
+        Task<User?> GetUserByIdAsync(Guid id);
         Task<User?> GetUserByEmailAsync(string email, IDbConnection conn, IDbTransaction tx);
         Task<User?> GetUserByEmailAsync(string email);
         Task<User?> GetUserByUserRefAsync(string userRef);

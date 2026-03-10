@@ -7,9 +7,9 @@ using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Logging;
 using Tools.Result;
 
-namespace Identity.Service.Application.Features.UserFeature.Queries.GetUserByEmail
+namespace Identity.Service.Application.Features.UserFeature.Queries.GetUserById
 {
-    public class GetUserByIdHandler : IRequestHandler<GetUserByEmailQuery, CqsResult<User?>>
+    public class GetUserByIdHandler : IRequestHandler<GetUserByIdQuery, CqsResult<User?>>
     {
         private readonly IUserQueryRepository _userQueryRepository;
         private readonly IUserRolesCommandRepository _userRoleCommandRepo;
@@ -23,25 +23,35 @@ namespace Identity.Service.Application.Features.UserFeature.Queries.GetUserByEma
             _userRoleCommandRepo = userRolesCommandRepository;
         }
 
-        public async Task<CqsResult<User?>> Handle(GetUserByEmailQuery request, CancellationToken cancellationToken)
+        public async Task<CqsResult<User?>> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
         {
             // validations
             if(request == null)
                 return CqsResult<User?>.Failure(Error.Validation("Request is require"));
 
-            if(request.Email == null)
-                return CqsResult<User?>.Failure(Error.Validation("Email is require"));
+
+            if(request.Id == null)
+                return CqsResult<User?>.Failure(Error.Validation("Id is require"));
+
+            Guid userId = new Guid();           
+            
+            try
+            {
+               userId = Guid.Parse(request.Id);
+            }
+            catch
+            {
+                return CqsResult<User?>.Failure(Error.Validation("Id not valid"));
+            }
 
             User? user;
 
             try
-            {
-                
-
-                user = await _userQueryRepository.GetUserByEmailAsync(request.Email);
+            {              
+                user = await _userQueryRepository.GetUserByIdAsync(userId);
 
                 if(user is null)
-                    return CqsResult<User?>.Failure(Error.NotFound(request.Email));
+                    return CqsResult<User?>.Failure(Error.NotFound(request.Id));
 
                 return CqsResult<User?>.Success(user);
 
