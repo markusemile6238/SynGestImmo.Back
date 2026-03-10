@@ -1,8 +1,9 @@
-﻿using Entity.Service.Domain.Enum;
+﻿using MediatR;
+using Tools.Result;
 
-namespace Entity.Service.Application.Dtos.EntitySgi
+namespace Entity.Service.Application.Features.EntityFeature.Commands.CreateEntity
 {
-    public class CreateEntityDtos
+    public class CreateEntityCommand : IRequest<CqsResult>
     {
         public string EntityType { get; set; } = string.Empty;
         public string DisplayName { get; set; } = string.Empty;
@@ -14,4 +15,3 @@ namespace Entity.Service.Application.Dtos.EntitySgi
         public string nationalId { get; set; } = string.Empty;
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     }
-}

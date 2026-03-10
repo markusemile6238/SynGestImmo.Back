@@ -15,7 +15,7 @@ namespace Identity.Service.Infrastructure.Services
         IUserCommandRepository userCommandRepository,
         IUserRolesCommandRepository userRolesCommandRepository,
         IRolesQueryRepository rolesQueryRepository,
-        IUserReferenceService userReferenceService,
+        IUserReferenceService userReferenceService, 
         IPasswordHasher passwordHasher
         ) : IUserCreator
     {

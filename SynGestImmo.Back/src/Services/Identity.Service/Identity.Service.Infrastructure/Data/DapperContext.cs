@@ -2,12 +2,7 @@
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Identity.Service.Infrastructure.Data
 {
@@ -25,7 +20,7 @@ namespace Identity.Service.Infrastructure.Data
 
             if (String.IsNullOrWhiteSpace(_connectionString)) throw new InvalidOperationException("Connection string 'SGI.Service.Identity' is missing or empty in appsettings.json");
 
-            _logger.LogInformation($"Connection string configuration {_connectionString}");
+            _logger.LogInformation("Connection string configuration: {ConnnectionState}",_connectionString);
 
         }
 
@@ -40,17 +35,17 @@ namespace Identity.Service.Infrastructure.Data
             }
             catch (SqlException ex) when (ex.Number == 4060) // database not found  
             {
-                _logger.LogError($"Error sql connection : {ex.Message}\n Sql Error Number: : {ex.Number}");
+                _logger.LogError(ex,"Error sql connection : {Message}\n Sql Error Number: : {Number}",ex.Message,ex.Number);
                 throw new IdentityServiceException("DATABASE_CONNECTION_FAILED", "cannot connect to database",500);
             }
             catch (SqlException ex) 
             {
-                _logger.LogError($"Database error : {ex.Message}\n Sql Error Number:{ex.Number}");
+                _logger.LogError(ex,"Database error : {Message}\n Sql Error Number:{Number}",ex.Message,ex.Number);
                 throw new IdentityServiceException("DATABASE_ERROR", $"Database error :{ex.Message}", 500);
             }
             catch(Exception ex)
             {
-                _logger.LogError($"Unexpected error : {ex.Message}\n <<<<<ERROR>>>>>{ex}");
+                _logger.LogError(ex,"Unexpected error : {Message}\n <<<<<ERROR>>>>>{Ex}",ex.Message,ex);
                 throw new IdentityServiceException("CONNECTION_UNEXPECTED_ERROR",
                     "Unexpected connection error", 500);
             }

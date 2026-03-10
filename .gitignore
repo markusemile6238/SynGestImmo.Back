@@ -59,6 +59,7 @@ Thumbs.db
 # On garde appsettings.json, mais on ignore les versions de dev spécifiques ou locales
 appsettings.Development.json
 appsettings.Local.json
+*appsettings*
 
 # Fichiers de configuration de lancement (ports, variables d'env)
 # À ignorer si chaque développeur a sa propre config de port

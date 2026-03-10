@@ -1,10 +1,4 @@
 ﻿using Identity.Service.Application.Common;
-using Identity.Service.Application.Features.UserFeature.Services;
-using Identity.Service.Domain.Entities;
-using Identity.Service.Domain.Repositories.RoleRepositories;
-using Identity.Service.Domain.Repositories.UserRepositories;
-using Identity.Service.Domain.Repositories.UserRolesRepositories;
-using Identity.Service.Domaine.Entities;
 using MediatR;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Logging;

@@ -7,9 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\//..\Tools\Tools.csproj" />
-    <ProjectReference Include="..\Entity.Service.Application\Entity.Service.Application.csproj" />
-
+    <ProjectReference Include="..\..\Tools\Tools.csproj" />
   </ItemGroup>
 
 </Project>

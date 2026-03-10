@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Tools.Result;
-
+using Entity.Service.Application.Dtos;
+using Entity.Service.Application.Dtos.EntitySgi;
 
 namespace Entity.Service.API.Controllers
 {
@@ -13,14 +14,14 @@ namespace Entity.Service.API.Controllers
     public class EntitySgiController : ControllerBase
     {
 
-        /// <summary>
-        /// [HttpPost]
-        ///[Route("/new")]
-        ///public void  CreateNewEntity()
-        ///{
 
-        ///}
-        /// </summary>
+        [HttpPost]
+        [Route("/new")]
+        public void CreateNewEntity()
+        {
+
+        }
+
 
     }
 }

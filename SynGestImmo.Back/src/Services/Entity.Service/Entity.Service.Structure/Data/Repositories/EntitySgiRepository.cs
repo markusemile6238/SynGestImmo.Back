@@ -1,15 +1,10 @@
 ﻿using Entity.Service.Domain.Enum;
 using Entity.Service.Domain.Repositories.EntityRepositorie;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Entity.Service.Structure.Data.Repositories
 {
-    public class EntitySgi : IEntityCommandRepository, IEntityQueryRepository
+    public class EntitySgiRepository : IEntityCommandRepository, IEntityQueryRepository
     {
         public Task<bool> ActiveEntityAsync(int id)
         {
