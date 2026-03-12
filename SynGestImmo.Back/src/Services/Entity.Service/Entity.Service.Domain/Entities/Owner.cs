@@ -9,7 +9,7 @@ namespace Entity.Service.Domain.Entities
 {
     public class Owner
     {
-        public int EntityId { get; set; }
+        public Guid EntityId { get; set; }
         public OwnerTypeEnum OwnerType { get; set; }
         public string Notes { get; set; } = string.Empty;
     }

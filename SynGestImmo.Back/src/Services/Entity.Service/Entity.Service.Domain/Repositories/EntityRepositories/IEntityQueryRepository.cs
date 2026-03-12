@@ -2,7 +2,7 @@
 using Entity.Service.Domain.Enum;
 using System.Data;
 
-namespace Entity.Service.Domain.Repositories.EntityRepositorie
+namespace Entity.Service.Domain.Repositories.EntityRepositories
 {
     public interface IEntityQueryRepository
     {

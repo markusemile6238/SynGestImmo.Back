@@ -14,6 +14,8 @@ namespace Identity.Service.Infrastructure
 {
     public static class DependencyInjection
     {
+        
+
         public static IServiceCollection AddInfrastructure(this IServiceCollection services) 
         {
 
@@ -49,7 +51,6 @@ namespace Identity.Service.Infrastructure
             services.AddScoped<IDapperConnection, DapperContext>();
 
             services.AddScoped<IUserCreator, UserCreatorService>();
-
 
 
             return services;

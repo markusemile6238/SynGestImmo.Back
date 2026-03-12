@@ -6,7 +6,7 @@ using System.Data;
 
 namespace Entity.Service.Structure.Data
 {
-    internal class DapperConnection : IDapperConnection
+    public class DapperConnection : IDapperConnection
     {
 
         private readonly IConfiguration _configuration;

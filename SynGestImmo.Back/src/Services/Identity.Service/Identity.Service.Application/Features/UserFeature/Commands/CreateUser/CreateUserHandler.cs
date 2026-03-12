@@ -7,20 +7,15 @@ using Tools.Result;
 
 namespace Identity.Service.Application.Features.UserFeature.Commands.CreateUser
 {
-    public class CreateUserHandler : IRequestHandler<CreateUserCommand, CqsResult>
+    public class CreateUserHandler(
+        IUserCreator _userCreator,
+        IUnitOfWork _unitOfWork,
+        
+        ILogger<CreateUserHandler> _logger,
+        ISqlExceptionTranslator _sqlTranslator
+        ) : IRequestHandler<CreateUserCommand, CqsResult>
     {
-        private readonly IUserCreator _userCreator;
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly ILogger<CreateUserHandler> _logger;
-        private readonly ISqlExceptionTranslator _sqlTranslator;
-
-        public CreateUserHandler(IUserCreator userCreator, IUnitOfWork unitOfWork, ILogger<CreateUserHandler> logger, ISqlExceptionTranslator sqlTranslator)
-        {
-            _userCreator = userCreator;
-            _unitOfWork = unitOfWork;
-            _logger = logger;
-            _sqlTranslator = sqlTranslator;
-        }
+       
 
         public async Task<CqsResult> Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
@@ -48,6 +43,9 @@ namespace Identity.Service.Application.Features.UserFeature.Commands.CreateUser
                 if (result.IsSuccess)
                     _logger.LogInformation("User {Email} created successfully", request.Email);
                 
+                // create de entity and person to entity API
+
+
                 return result;
 
 

@@ -1,28 +1,17 @@
 ﻿using Identity.Service.Domain.Entities;
-using Identity.Service.Domain.Exceptions;
 using Identity.Service.Domain.Repositories.UserRolesRepositories;
 using Identity.Service.Domaine.Entities;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Identity.Service.Infrastructure.Data.Repositories
 {
-    class UserRolesRepository : IUserRolesCommandRepository, IUserRolesQueryRepository
+    class UserRolesRepository(
+        IDapperConnection _connection,
+        ILogger<UserRolesRepository> _logger
+        ): IUserRolesCommandRepository, IUserRolesQueryRepository
     {
-        private readonly IDapperConnection _connection;
-        private readonly ILogger<UserRolesRepository> _logger;
-
-        public UserRolesRepository(IDapperConnection connection, ILogger<UserRolesRepository> logger)
-        {
-            _connection = connection;
-            _logger = logger;
-        }
-
+        
         // COMMANDS
 
 

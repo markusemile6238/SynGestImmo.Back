@@ -6,21 +6,13 @@ using System.Data;
 
 namespace Identity.Service.Infrastructure.Data.Repositories
 {
-    public class RoleRepository : IRolesCommandRepository, IRolesQueryRepository
+    public class RoleRepository(
+        IDapperConnection _connection,
+        ILogger<RoleRepository> _logger,
+        SqlExceptionsHandler _sqlHandler
+        ) : IRolesCommandRepository, IRolesQueryRepository
     {
 
-        private readonly IDapperConnection _connection;
-        private readonly ILogger<RoleRepository> _logger;
-        private readonly SqlExceptionsHandler _sqlHandler;
-
-
-        public RoleRepository(IDapperConnection connection, ILogger<RoleRepository> logger, SqlExceptionsHandler exceptionsHandler)
-        {
-            _connection = connection;
-            _logger = logger;
-            _sqlHandler = exceptionsHandler;
-
-        }
 
         public Task AssignRoleToUserAsync(Guid assignedBy, Guid assignedAt, int role)
         {

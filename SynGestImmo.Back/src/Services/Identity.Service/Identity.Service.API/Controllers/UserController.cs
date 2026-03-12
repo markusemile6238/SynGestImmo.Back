@@ -19,18 +19,11 @@ namespace Identity.Service.API.Controllers
     [Authorize(Policy = "PasswordChanged")]
     [Consumes("application/json")] // Accepter JSON
     [Produces("application/json")] // Retourner JSON
-    public class UserController : ControllerBase
+    public class UserController(
+        IMediator _mediator,
+        ILogger<UserController> _logger
+        ) : ControllerBase
     {
-        private readonly IMediator _mediator;
-        private readonly ILogger<UserController> _logger;
-
-        public UserController(IMediator mediator, ILogger<UserController> logger)
-        {
-            _mediator = mediator;
-            _logger = logger;
-        }
-
-
 
         #region GET ALL
         [HttpGet]
@@ -68,6 +61,7 @@ namespace Identity.Service.API.Controllers
 
             var command = new CreateUserCommand
             {
+                Username = dto.Username,
                 Email = dto.Email,
                 Password = dto.Password,
                 RoleId = dto.RoleId,

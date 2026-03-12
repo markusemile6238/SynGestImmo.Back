@@ -3,16 +3,12 @@ using System.Data;
 
 namespace Entity.Service.Structure.Data
 {
-    public class UowCreatingEnity : IUowCreateEnity
+    public class UowCreatingEntity(
+    IDapperConnection _connection
+        
+        ) : IUowCreateEntity
     {
 
-        private readonly IDapperConnection _connection;
-
-        public UowCreatingEnity(IDapperConnection connection)
-        {
-            _connection = connection;
-
-        }
 
         public async Task ExecuteAsync(Func<IDbConnection, IDbTransaction, Task> action)
         {
@@ -49,5 +45,6 @@ namespace Entity.Service.Structure.Data
                 transaction.Rollback();
                 throw;
             }
+        }
     }
 }

@@ -8,10 +8,10 @@ namespace Entity.Service.Domain.Enum
 {
     public enum EntityTypeEnum
     {
-        Entites,
-        Owners,
-        Persons,
-        Tenants,
-        Companies
+        Entites = 0,
+        Owners = 1,
+        Persons = 2,
+        Tenants = 3,
+        Companies = 4
     }
 }

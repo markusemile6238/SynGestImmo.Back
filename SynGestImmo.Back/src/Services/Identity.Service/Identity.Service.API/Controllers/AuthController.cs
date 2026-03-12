@@ -14,16 +14,13 @@ namespace Identity.Service.API.Controllers
     [Route("api/auth")]
     [ApiController]
     [Produces("application/json")] // Retourner JSON
-    public class AuthController : ControllerBase
+    public class AuthController(
+        IMediator _mediator,
+        ILogger<AuthController> _logger
+        ) : ControllerBase
     {
-        private readonly IMediator _mediator;
-        private readonly ILogger<AuthController> _logger;
+        
 
-        public AuthController(IMediator mediator, ILogger<AuthController> logger)
-        {
-            _mediator = mediator;
-            _logger = logger;
-        }
 
 
         #region LOGIN

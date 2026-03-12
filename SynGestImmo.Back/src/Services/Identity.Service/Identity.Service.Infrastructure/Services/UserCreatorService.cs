@@ -36,6 +36,7 @@ namespace Identity.Service.Infrastructure.Services
 
             var user = new User
             {
+                Username = request.Username,
                 Email = request.Email,
                 PasswordHash = _passwordHasher.HashPassword(request.Password),
                 UserRef = await _userReferenceService.GenerateAsync(request.RoleId),

@@ -5,7 +5,7 @@
         [PasswordHash] NVARCHAR(255) NOT NULL,
 		[MustChangePassword] BIT DEFAULT 1,
         [UserRef] NVARCHAR(50) UNIQUE NOT NULL,
-		[EntityId] UNIQUEIDENTIFIER NULL,
+		[EntityId] INT NULL,
         [MainRoleId] int NULL , -- role Principal
         [IsActive] BIT DEFAULT 1,
         [CreatedAt] DATETIME2 DEFAULT GETDATE(),

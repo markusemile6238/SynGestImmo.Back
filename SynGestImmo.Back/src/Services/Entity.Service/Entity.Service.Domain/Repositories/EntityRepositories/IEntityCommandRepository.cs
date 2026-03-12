@@ -3,11 +3,11 @@ using System.Data;
 using Tools.Result;
 
 
-namespace Entity.Service.Domain.Repositories.EntityRepositorie
+namespace Entity.Service.Domain.Repositories.EntityRepositories
 {
     public interface IEntityCommandRepository
     {
-        Task<bool> CreateEntityAsync(EntitySgi entity, IDbConnection conn, IDbTransaction tx);
+        Task<Guid> CreateEntityAsync(EntitySgi entity, IDbConnection conn, IDbTransaction tx);
         Task<bool> UpdateEntityAsync(EntitySgi entity, IDbConnection conn, IDbTransaction tx);
         Task<bool> DeleteEntityAsync(int id);
         Task<bool> DesactiveEntityAsync(int id);

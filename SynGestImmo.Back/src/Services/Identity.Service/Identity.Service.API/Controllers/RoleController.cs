@@ -11,17 +11,11 @@ namespace Identity.Service.API.Controllers
     [Authorize(Policy = "PasswordChanged")]
     [Consumes("application/json")] // Accepter JSON
     [Produces("application/json")] // Retourner JSON
-    public class RoleController : ControllerBase
+    public class RoleController(
+        IMediator _mediator,
+        ILogger<RoleController> _logger
+    ) : ControllerBase
     {
-        private readonly IMediator _mediator;
-        private readonly ILogger<RoleController> _logger;
-
-        public RoleController(IMediator mediator, ILogger<RoleController> logger)
-        {
-            _mediator = mediator;
-            _logger = logger;
-        }
-
 
         [HttpGet]
         public async Task<IActionResult> GetAllRoles()

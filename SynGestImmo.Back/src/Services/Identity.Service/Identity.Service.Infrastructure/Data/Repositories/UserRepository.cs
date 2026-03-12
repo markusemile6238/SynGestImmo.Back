@@ -49,7 +49,7 @@ namespace Identity.Service.Infrastructure.Data.Repositories
     
         #region AssignRolesToUserAsynch
 
-        public async Task<bool> AssignRoleIdAsync(int Id, Guid userId)
+        public async Task<bool> AssignRoleIdAsync(int id, Guid userId)
         {
 
                 using var connection = await _connection.CreateConnectionAsync();
@@ -60,7 +60,7 @@ namespace Identity.Service.Infrastructure.Data.Repositories
                 
                 var rowAffected = await connection.ExecuteAsync(sql, new 
                 { 
-                    Id,
+                    id,
                     userId 
                 });
 

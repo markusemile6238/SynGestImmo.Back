@@ -12,16 +12,12 @@ namespace Identity.Service.API.Controllers
     [ApiController]
     [Produces("application/json")]
 
-    public class ContractsController : Controller
+    public class ContractsController(
+        ILogger<ContractsController> _logger,
+        IMediator _mediator
+    ) : Controller
     {
-        private readonly ILogger<ContractsController> _logger;
-        private readonly IMediator _mediator;
 
-        public ContractsController(ILogger<ContractsController> logger, IMediator mediator)
-        {
-            _logger = logger;
-            _mediator = mediator;
-        }
 
         [HttpPost]
         public async Task<IActionResult> RenewPassword([FromBody] RenewPasswordDto dto)

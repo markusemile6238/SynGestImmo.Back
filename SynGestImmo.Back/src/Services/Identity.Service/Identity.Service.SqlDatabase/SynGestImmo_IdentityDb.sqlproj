@@ -75,6 +75,14 @@
     <Build Include="Entities\Permissions.sql" />
     <Build Include="Entities\RolePermissions.sql" />
     <Build Include="Entities\RefreshTokens.sql" />
+    <Build Include="Entities\Addresses.sql" />
+    <Build Include="Entities\Companies.sql" />
+    <Build Include="Entities\Contacts.sql" />
+    <Build Include="Entities\Entities.sql" />
+    <Build Include="Entities\EntityAddresses.sql" />
+    <Build Include="Entities\Owners.sql" />
+    <Build Include="Entities\Persons.sql" />
+    <Build Include="Entities\Tenants.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Data\InsertRoles.sql" />

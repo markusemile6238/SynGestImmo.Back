@@ -1,0 +1,8 @@
+﻿CREATE TABLE [entity].[Addresses]
+(
+	[Id] INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
+	[Street] VARCHAR(120) NOT NULL,
+	[City] VARCHAR(80) NOT NULL,
+	[PostalCode] VARCHAR(10) NOT NULL,
+	[Country] VARCHAR (50)
+)

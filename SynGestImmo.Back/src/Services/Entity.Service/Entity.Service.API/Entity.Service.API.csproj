@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.13" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.14" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.3.9" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Abstractions" Version="2.3.9" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.13" />
@@ -16,6 +16,8 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Tools\Tools.csproj" />
     <ProjectReference Include="..\Entity.Service.Application\Entity.Service.Application.csproj" />
+    <ProjectReference Include="..\Entity.Service.Domain\Entity.Service.Domain.csproj" />
+    <ProjectReference Include="..\Entity.Service.Structure\Entity.Service.Structure.csproj" />
   </ItemGroup>
 
 </Project>
