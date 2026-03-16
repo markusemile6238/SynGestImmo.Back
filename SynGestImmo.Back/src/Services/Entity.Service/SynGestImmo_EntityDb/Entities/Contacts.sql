@@ -1,7 +1,7 @@
 ﻿CREATE TABLE [entity].[Contacts]
 (
 	[Id] INT NOT NULL IDENTITY PRIMARY KEY,
-	[EntityId] INT NOT NULL ,
+	[EntityId] UNIQUEIDENTIFIER NOT NULL ,
 	[ContactType]  VARCHAR(30) NOT NULL,
 	[Value] VARCHAR (150) NOT NULL,
 

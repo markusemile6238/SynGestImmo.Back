@@ -35,6 +35,14 @@ namespace Entity.Service.Structure.Data.Repositories
         {
             throw new NotImplementedException();
         }
+        
+        public Task<bool> UpdatePersonAsync(Person person, IDbConnection conn, IDbTransaction tx)
+        {
+            throw new NotImplementedException();
+        }
+        
+        
+        // Query
 
         public Task<IEnumerable<Person>> GetAll()
         {
@@ -46,14 +54,19 @@ namespace Entity.Service.Structure.Data.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<EntitySgi?> GetPersonByIdAsync(int id, IDbConnection conn, IDbTransaction tx)
+        public async Task<Person?> GetPersonByIdAsync(Guid entityId, IDbConnection conn, IDbTransaction tx)
         {
-            throw new NotImplementedException();
+            Console.WriteLine("=====>INOTO structuire person request sql ");
+            const string sql = @"SELECT 
+                                    EntityId,FirstName,LastName,BirthDate,NationalId
+                                 FROM [entity].[Persons]
+                                 WHERE EntityId = @EntityId";
+
+            var person = await conn.QueryFirstOrDefaultAsync<Person?>(sql, new { EntityId =  entityId }, tx);
+            Console.WriteLine("=====>AFTER request sql ");
+            return person;
+
         }
 
-        public Task<bool> UpdatePersonAsync(Person person, IDbConnection conn, IDbTransaction tx)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

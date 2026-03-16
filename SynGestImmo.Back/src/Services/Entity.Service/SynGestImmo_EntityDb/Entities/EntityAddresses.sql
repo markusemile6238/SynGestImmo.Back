@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [entity].[EntityAddresses]
 (
-	[EntityId] INT NOT NULL PRIMARY KEY,
+	[EntityId] UNIQUEIDENTIFIER NOT NULL PRIMARY KEY,
 	[AddressId] INT NOT NULL,
 	[AddressType] VARCHAR(20) NOT NULL,
 

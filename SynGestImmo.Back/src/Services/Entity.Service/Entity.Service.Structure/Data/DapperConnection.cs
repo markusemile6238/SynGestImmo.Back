@@ -1,4 +1,5 @@
-﻿using Entity.Service.Domain.ExceptionService;
+﻿using Entity.Service.Application.Common;
+using Entity.Service.Domain.ExceptionService;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;

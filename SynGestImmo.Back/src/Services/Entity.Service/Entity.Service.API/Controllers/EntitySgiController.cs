@@ -1,5 +1,6 @@
 ﻿using Entity.Service.Application.Dtos.EntitySgi;
 using Entity.Service.Application.Features.EntityFeature.Commands.CreateEntity;
+using Entity.Service.Application.Features.EntityFeature.Queries.GetEntityById;
 using Entity.Service.Domain.Enum;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -19,6 +20,7 @@ namespace Entity.Service.API.Controllers
         ) : ControllerBase
     {
 
+        #region AddNewEntity
         [HttpPost]
         [Route("new")]
         public async Task<IActionResult> CreateNewEntity([FromBody] CreateEntityDtos dto)
@@ -54,14 +56,33 @@ namespace Entity.Service.API.Controllers
                 NationalId = dto.NationalId,
                 CreatedAt = dto.CreatedAt!.Value
             };
-             _logger.LogInformation("Sending CreateEntityCommand for entity with display name: {DisplayName}", command.DisplayName);
+            _logger.LogInformation("Sending CreateEntityCommand for entity with display name: {DisplayName}", command.DisplayName);
 
             var result = await _mediator.Send(command);
 
-            return Ok( result );
+            return Ok(result);
 
         }
 
+        #endregion
+
+
+        #region GetEntityByUserId
+
+        [HttpGet]
+        [Route("{entityId}")]
+        public async Task<IActionResult> GetEntityByUserId(Guid? entityId)
+        {
+            if (entityId == null || entityId == Guid.Empty)
+                return BadRequest(CqsResult.Failure(Error.Validation("Id request or not valid")));
+
+            var query = new GetEntityByIdQuery { EntityId = entityId };
+            var result = await _mediator.Send(query);
+
+            return Ok(result);
+
+        }
+        #endregion
 
     }
 }

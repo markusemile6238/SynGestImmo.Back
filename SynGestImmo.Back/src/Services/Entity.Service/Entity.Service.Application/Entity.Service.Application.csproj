@@ -12,7 +12,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Features\EntityFeature\Queries\" />
 	  <Folder Include="Features\PersonFeature\Commands\" />
 	  <Folder Include="Features\PersonFeature\Queries\" />
 	</ItemGroup>

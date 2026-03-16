@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [entity].[Owners]
 (
-	[EntityId] INT NOT NULL PRIMARY KEY,
+	[EntityId] UNIQUEIDENTIFIER NOT NULL PRIMARY KEY,
 	[OwnerType] VARCHAR(25) NOT NULL,
 	[Notes] TEXT NULL
 

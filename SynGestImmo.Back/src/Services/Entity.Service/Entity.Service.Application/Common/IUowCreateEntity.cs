@@ -1,6 +1,6 @@
 ﻿using System.Data;
 
-namespace Entity.Service.Application.common
+namespace Entity.Service.Application.Common
 {
     public interface IUowCreateEntity
     {

@@ -5,7 +5,7 @@
 	[Notes] TEXT NULL
 
 	--CONSTRAINTS
-	CONSTRAINT [FK_Owner_EntityID] FOREIGN KEY (EntityID) REFERENCES [entity].[Entities] (Id)
+	CONSTRAINT [FK_Owner_EntityId] FOREIGN KEY (EntityId) REFERENCES [entity].[Entities] (Id)
 	
 	/*	
 	OWNERTYPE

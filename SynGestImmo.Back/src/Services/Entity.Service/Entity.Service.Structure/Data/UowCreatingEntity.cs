@@ -1,4 +1,4 @@
-﻿using Entity.Service.Application.common;
+﻿using Entity.Service.Application.Common;
 using System.Data;
 
 namespace Entity.Service.Structure.Data

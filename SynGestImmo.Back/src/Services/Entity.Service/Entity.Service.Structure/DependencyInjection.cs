@@ -1,4 +1,5 @@
-﻿using Entity.Service.Application.common;
+﻿
+
 using Entity.Service.Application.Common;
 using Entity.Service.Domain.Repositories.EntityRepositories;
 using Entity.Service.Domain.Repositories.PersonRepositories;
@@ -17,11 +18,11 @@ namespace Entity.Service.Structure
           
             services.AddScoped<SqlExceptionsHandler>();
 
-            services.AddScoped<IDapperConnection, DapperConnection>();
-
             services.AddScoped<IUowCreateEntity, UowCreatingEntity>();
 
             services.AddScoped<IEntityService, EntityService>();
+
+            services.AddScoped<IDapperConnection, DapperConnection>();
 
             // pour les identity
             services.AddScoped<EntitySgiRepository>();
@@ -35,7 +36,6 @@ namespace Entity.Service.Structure
 
 
 
-            services.AddScoped<IEntityService, EntityService>();
 
 
             return services;

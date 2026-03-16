@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [entity].[Companies]
 (
-	[EntityId] INT NOT NULL PRIMARY KEY,
+	[EntityId] UNIQUEIDENTIFIER NOT NULL PRIMARY KEY,
 	[CompanyName] VARCHAR(150) NOT NULL,
 	[VatNumber] FLOAT NOT NULL,
 	[RegistrationNumber] VARCHAR(20),

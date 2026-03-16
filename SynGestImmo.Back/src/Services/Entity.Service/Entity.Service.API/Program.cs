@@ -25,8 +25,8 @@ namespace Entity.Service.API
             builder.Services.AddScoped<ISqlExceptionTranslator, SqlExceptionsHandler>();
 
             // Add services to the container.
-            builder.Services.AddApplication();
             builder.Services.AddInfrastructure();
+            builder.Services.AddApplication();
 
             builder.Services.AddHttpContextAccessor();
             builder.Services.AddTransient<TokenPropagationHandler>();

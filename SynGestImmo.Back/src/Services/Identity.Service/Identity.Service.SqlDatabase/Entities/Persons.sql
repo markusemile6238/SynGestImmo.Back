@@ -7,7 +7,7 @@
 	[NationalId] VARCHAR(30) NOT NULL,
 
 	--CONSTRAINTS
-	CONSTRAINT [FK_entity_EntityID] FOREIGN KEY (EntityID) REFERENCES [entity].[Entities] (Id)
+	CONSTRAINT [FK_entity_EntityId] FOREIGN KEY (EntityId) REFERENCES [entity].[Entities] (Id)
 	
 
 )

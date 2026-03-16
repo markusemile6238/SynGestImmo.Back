@@ -50,22 +50,29 @@ namespace Entity.Service.Structure.Data.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Domain.Entities.EntitySgi>> GetAll()
+        public Task<IEnumerable<EntitySgi>> GetAll()
         {
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Domain.Entities.EntitySgi>> GetEntityByEntityType(EntityTypeEnum entityType, IDbConnection conn, IDbTransaction tx)
+        public Task<IEnumerable<EntitySgi>> GetEntityByEntityType(EntityTypeEnum entityType, IDbConnection conn, IDbTransaction tx)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Domain.Entities.EntitySgi?> GetEntityByIdAsync(int id, IDbConnection conn, IDbTransaction tx)
+        public async Task<EntitySgi?> GetEntityByIdAsync(Guid entityId, IDbConnection conn, IDbTransaction tx)
         {
-            throw new NotImplementedException();
-        }
+            const string sql = @"
+                   SELECT Id,DisplayName,Email,Phone,IsActive,EntityType,CreatedAt,UpdatedAt 
+                   FROM [entity].[Entities]
+                   WHERE Id = @EntityId";
 
-        public Task<bool> UpdateEntityAsync(Domain.Entities.EntitySgi entity, IDbConnection conn, IDbTransaction tx)
+            var result = await conn.QueryFirstOrDefaultAsync<EntitySgi>(sql, new { EntityId=entityId }, tx);
+            return result;
+                
+        }       
+
+        public Task<bool> UpdateEntityAsync(EntitySgi entity, IDbConnection conn, IDbTransaction tx)
         {
             throw new NotImplementedException();
         }

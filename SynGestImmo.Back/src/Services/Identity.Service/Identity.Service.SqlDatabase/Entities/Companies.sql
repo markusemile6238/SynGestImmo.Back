@@ -6,5 +6,5 @@
 	[RegistrationNumber] VARCHAR(20),
 
 	--CONSTRAINTS
-	CONSTRAINT [FK_Companies_EntityID] FOREIGN KEY (EntityID) REFERENCES [entity].[Entities] (Id)
+	CONSTRAINT [FK_Companies_EntityId] FOREIGN KEY (EntityId) REFERENCES [entity].[Entities] (Id)
 )

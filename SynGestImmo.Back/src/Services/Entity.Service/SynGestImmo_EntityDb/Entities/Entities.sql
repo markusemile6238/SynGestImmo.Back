@@ -3,8 +3,8 @@ GO
 
 CREATE TABLE [entity].[Entities]
 (
-    [Id] UNIQUEIDENTIFIER NOT NULL PRIMARY KEY,
-    [EntityType] VARCHAR(20) NOT NULL,
+    [Id] UNIQUEIDENTIFIER ,
+    [EntityType] INT NOT NULL,
     [DisplayName] VARCHAR(50) NOT NULL,
     [Email] VARCHAR(150) NOT NULL,
     [Phone] VARCHAR(80) NOT NULL,
@@ -13,7 +13,6 @@ CREATE TABLE [entity].[Entities]
     [UpdatedAt] DATETIME DEFAULT SYSUTCDATETIME() NULL,
     
     --CONSTRAINT
-    CONSTRAINT [FK_Entities_EntityType] FOREIGN KEY (Id) REFERENCES [dbo].[Users](Id),
-    CONSTRAINT [CK_Entities_EntityType] CHECK(EntityType IN('Entites','Owners','Persons','Tenants','Companies'))
-
+    CONSTRAINT [FK_Entities_Id] FOREIGN KEY (Id) REFERENCES [Users] (EntityId)
 );
+    
