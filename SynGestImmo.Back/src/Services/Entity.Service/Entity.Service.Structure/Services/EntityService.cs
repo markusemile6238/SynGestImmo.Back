@@ -105,6 +105,7 @@ namespace Entity.Service.Structure.Services
                     BirthDate = personDatas.BirthDate,
                     Email = entityDatas.Email,
                     Phone = entityDatas.Phone,
+                    NationalId = personDatas.NationalId,
                     IsActive = entityDatas.IsActive,
                     CreatedAt = entityDatas.CreatedAt,
                     UpdatedAt = entityDatas.UpdatedAt
