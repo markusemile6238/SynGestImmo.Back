@@ -10,6 +10,7 @@ using Identity.Service.Application.Features.UserFeature.Queries.GetAllUser;
 using Microsoft.AspNetCore.Authorization;
 using Identity.Service.Application.Features.UserFeature.Commands.UpdateUser;
 using Identity.Service.Application.Features.UserFeature.Queries.GetUserById;
+using Identity.Service.Application.Features.UserFeature.Queries.GetUserByEntityId;
 
 namespace Identity.Service.API.Controllers
 {
@@ -101,6 +102,20 @@ namespace Identity.Service.API.Controllers
         }   
         #endregion
 
+        #region GETUSERBYEntityId
+        [HttpGet]
+        [Route("detail/e/{id}")]
+        public async Task<ActionResult<CqsResult>> GetUserByEntityId(string id)
+        {
+            if (!ModelState.IsValid)
+                return CqsResult.Failure(Error.Validation("Id not valid."));
+
+            var query = new GetUserByEntityIdQuery { EntityId = id };
+            var result = await _mediator.Send(query);
+            return Ok(result);
+        }   
+        #endregion
+
         #region DELETEUSER
         [HttpDelete]
         public async Task<ActionResult<CqsResult>> DeleteUserById([FromBody] DeleteUserDto dto)
@@ -115,9 +130,10 @@ namespace Identity.Service.API.Controllers
         }
         #endregion
 
-       
 
 
+
+        #region UPDATEUSER
         [HttpPut]
         public async Task<ActionResult<CqsResult>> UpdateUser([FromBody] UpdateUserDto dto)
         {
@@ -130,14 +146,15 @@ namespace Identity.Service.API.Controllers
                 Id = dto.Id,
                 Username = dto.Username,
                 Email = dto.Email,
-                
-                MainRoleId = dto.RoleId 
-                
+
+                MainRoleId = dto.RoleId
+
             };
             var result = await _mediator.Send(command);
             return Ok(result);
         }
-        
+
+        #endregion
 
 
     }

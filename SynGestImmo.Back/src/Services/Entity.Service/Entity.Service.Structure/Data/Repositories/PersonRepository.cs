@@ -14,19 +14,20 @@ namespace Entity.Service.Structure.Data.Repositories
         public async Task<Guid> CreatePersonAsync(Person person, IDbConnection conn, IDbTransaction tx)
         {
            const string sql = @"INSERT INTO [entity].[Persons](
-                                EntityId,
+                                [EntityId],
                                 FirstName,
                                 LastName,
                                 BirthDate,
-                                NationalId) 
-                            VALUES (@EntityId, @FirstName, @LastName, @BirthDate, @NationalId);
-                            SELECT CAST(SCOPE_IDENTITY() as UNIQUEIDENTIFIER) ";
+                                NationalId,
+                                JobTitle) 
+                            VALUES (@EntityId, @FirstName, @LastName, @BirthDate, @NationalId,@JobTitle)
+                         ";
            
-            Guid entityId = await conn.ExecuteScalarAsync<Guid>(sql, person, tx);
-            if (entityId == Guid.Empty)
+            int affetcedRows = await conn.ExecuteAsync(sql, person, tx);
+            if (affetcedRows == 0)
                 throw new EntityServiceExceptions("Insert Person Failed");
 
-            return entityId;
+            return person.EntityId;
 
 
         }
@@ -36,9 +37,17 @@ namespace Entity.Service.Structure.Data.Repositories
             throw new NotImplementedException();
         }
         
-        public Task<bool> UpdatePersonAsync(Person person, IDbConnection conn, IDbTransaction tx)
+        public async Task<bool> UpdatePersonAsync(Person person, IDbConnection conn, IDbTransaction tx)
         {
-            throw new NotImplementedException();
+            const string sql = @"UPDATE [entity].[Persons]
+                                SET FirstName = COALESCE(@FirstName, FirstName),
+                                    LastName = COALESCE(@LastName,LastName),
+                                    BirthDate = COALESCE(@BirthDate, BirthDate),
+                                    NationalId = COALESCE(@NationalId, NationalId),
+                                    JobTitle = COALESCE(@JobTitle, JobTitle)
+                                WHERE EntityId = @EntityId";
+            int affetcedRows = await conn.ExecuteAsync(sql, person, tx);
+            return affetcedRows > 0;
         }
         
         
@@ -56,14 +65,12 @@ namespace Entity.Service.Structure.Data.Repositories
 
         public async Task<Person?> GetPersonByIdAsync(Guid entityId, IDbConnection conn, IDbTransaction tx)
         {
-            Console.WriteLine("=====>INOTO structuire person request sql ");
             const string sql = @"SELECT 
-                                    EntityId,FirstName,LastName,BirthDate,NationalId
+                                    EntityId,FirstName,LastName,BirthDate,NationalId,JobTitle 
                                  FROM [entity].[Persons]
                                  WHERE EntityId = @EntityId";
 
             var person = await conn.QueryFirstOrDefaultAsync<Person?>(sql, new { EntityId =  entityId }, tx);
-            Console.WriteLine("=====>AFTER request sql ");
             return person;
 
         }

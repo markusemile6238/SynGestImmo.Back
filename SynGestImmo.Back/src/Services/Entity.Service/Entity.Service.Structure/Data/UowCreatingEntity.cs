@@ -46,5 +46,10 @@ namespace Entity.Service.Structure.Data
                 throw;
             }
         }
+
+        public Task ExecuteAsync<T>(Func<IDbConnection, IDbTransaction, Task> action)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

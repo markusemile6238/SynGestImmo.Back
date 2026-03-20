@@ -1,5 +1,6 @@
 ﻿using Entity.Service.Application.Dtos.EntitySgi;
 using Entity.Service.Application.Features.EntityFeature.Commands.CreateEntity;
+using Entity.Service.Application.Features.EntityFeature.Commands.UpdateEntity;
 using Entity.Service.Application.Features.EntityFeature.Queries.GetEntityById;
 using Entity.Service.Domain.Enum;
 using MediatR;
@@ -41,7 +42,6 @@ namespace Entity.Service.API.Controllers
                     );
             }
 
-            _logger.LogInformation("Received request to create new entity with display name: {DisplayName}", dto.DisplayName);
 
             var command = new CreateEntityCommand
             {
@@ -54,8 +54,10 @@ namespace Entity.Service.API.Controllers
                 FirstName = dto.FirstName,
                 BirthDate = dto.BirthDate,
                 NationalId = dto.NationalId,
+                JobTitle = dto.JobTitle,
                 CreatedAt = dto.CreatedAt!.Value
             };
+
             _logger.LogInformation("Sending CreateEntityCommand for entity with display name: {DisplayName}", command.DisplayName);
 
             var result = await _mediator.Send(command);
@@ -63,6 +65,40 @@ namespace Entity.Service.API.Controllers
             return Ok(result);
 
         }
+
+        #endregion
+
+        #region UpdateEnity
+        [HttpPut]
+        [Route("update")]
+        public async Task<IActionResult> UpdateEntity([FromBody] UpdateEntityDtos dto) { 
+        
+
+            
+            _logger.LogInformation("Received UpdateEntity request for entity with ID: {EntityId}", dto.EntityId);
+
+            var result = await _mediator.Send(new UpdateEntityCommand
+            {
+                EntityId = dto.EntityId,
+                EntityType = dto.EntityType,
+                DisplayName = dto.DisplayName,
+                Email = dto.Email,
+                Phone = dto.Phone,
+                IsActive = dto.IsActive,
+                LastName = dto.LastName,
+                FirstName = dto.FirstName,
+                BirthDate = dto.BirthDate,
+                NationalId = dto.NationalId,
+                JobTitle = dto.JobTitle,
+                CreatedAt = dto.CreatedAt,
+                UpdatedAt = DateTime.UtcNow
+            });
+
+
+
+            return Ok( result );
+        }
+
 
         #endregion
 

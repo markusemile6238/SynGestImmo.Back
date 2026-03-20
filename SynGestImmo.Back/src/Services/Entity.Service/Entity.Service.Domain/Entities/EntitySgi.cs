@@ -5,7 +5,7 @@ namespace Entity.Service.Domain.Entities
     public class EntitySgi
     {
         public Guid Id { get; set; }
-        public EntityTypeEnum  EntityType { get; set; }
+        public int EntityType { get; set; }
         public string DisplayName { get; set; } 
         public string Email { get; set; } 
         public string Phone { get; set; }

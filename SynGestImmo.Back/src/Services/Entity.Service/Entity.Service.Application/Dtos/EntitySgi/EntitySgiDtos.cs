@@ -10,7 +10,7 @@ namespace Entity.Service.Application.Dtos.EntitySgi
     public class EntitySgiDtos
     {
         public Guid Id { get; set; }
-        public EntityTypeEnum EntityType { get; set; }
+        public int EntityType { get; set; }
         public string DisplayName { get; set; }
         public string Email { get; set; }
         public string Phone { get; set; }
@@ -19,6 +19,7 @@ namespace Entity.Service.Application.Dtos.EntitySgi
         public string FirstName { get; set; }
         public DateTime? BirthDate { get; set; }
         public string NationalId { get; set; }
+        public JobTitleEnum? JobTitle { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
     }

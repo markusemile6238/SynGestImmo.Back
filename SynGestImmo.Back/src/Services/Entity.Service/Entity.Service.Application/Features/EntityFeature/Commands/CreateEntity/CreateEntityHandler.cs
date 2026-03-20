@@ -56,16 +56,12 @@ namespace Entity.Service.Application.Features.EntityFeature.Commands.CreateEntit
 
 
             // on va chercher si L'id existe bien
-            Console.WriteLine($"======>MAKE REQUEST TO IDENTITY SUR {request.Id}");
-
             _logger.LogInformation("Checking if user {UserId} exists in Identity service", request.Id);
 
             CqsResult<ApiIdentityGetUser> userExist = await identityApi.UserExistAsync(request.Id);
 
             if (!userExist.IsSuccess)
                 return CqsResult.Failure(Error.Validation("User with the provided ID does not exist in Identity Service"));
-
-            Console.WriteLine($"======>USER EXIST {userExist.Data?.Email}");
 
             try
             {
@@ -79,7 +75,6 @@ namespace Entity.Service.Application.Features.EntityFeature.Commands.CreateEntit
                 }
                 else
                 {
-                    Console.WriteLine("HERE<<<<<<<<<<");
                     _logger.LogError("Entity creation failed: {Error}", result.Error?.Message);
                     return CqsResult.Failure(result.Error);
                 }

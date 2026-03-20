@@ -34,6 +34,8 @@ namespace Entity.Service.Application.Dtos.EntitySgi
 
         [Required]
         public string NationalId { get; set; } 
+
+        public JobTitleEnum JobTitle { get; set; }
         public DateTime? CreatedAt { get; set; } = DateTime.UtcNow;
     }
 }

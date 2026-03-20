@@ -15,6 +15,7 @@ namespace Entity.Service.Application.Features.EntityFeature.Commands.CreateEntit
         public string FirstName { get; set; } = string.Empty;
         public DateTime? BirthDate { get; set; }
         public string NationalId { get; set; } = string.Empty;
+        public JobTitleEnum? JobTitle {get; set;}
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
        

@@ -6,7 +6,7 @@ namespace Entity.Service.Application.Features.IdentityFeature
 {
     public interface IIdentityApi
     {
-        [Get("/api/admin/user/detail/{id}")]
+        [Get("/api/admin/user/detail/e/{id}")]
         Task<CqsResult<ApiIdentityGetUser>> UserExistAsync(Guid id);
     }
 }

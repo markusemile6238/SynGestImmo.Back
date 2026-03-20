@@ -20,23 +20,25 @@ namespace Entity.Service.Structure.Data.Repositories
 
         public async Task<Guid> CreateEntityAsync(EntitySgi entity, IDbConnection conn, IDbTransaction tx)
         {
+
+
             const string sql = @"
                     INSERT INTO [entity].[Entities](
-                        Id
-                        EntityType,
+                        Id,
+                        [EntityType],
                         DisplayName,
                         Email,
                         Phone,
                         IsActive,
                         CreatedAt) 
-                    VALUES (@Id, @EntityType,@DisplayName,@Email,@Phone,@IsActive,@CreatedAt);
-                    SELECT CAST(SCOPE_IDENTITY() as UNIQUEIDENTIFIER)
+                    VALUES (@Id, @EntityType,@DisplayName,@Email,@Phone,@IsActive,@CreatedAt)                
                     ";
 
-            Guid entityId = await conn.ExecuteScalarAsync<Guid>(sql, entity, tx);
-            if (entityId == Guid.Empty)
+            int affectedRows = await conn.ExecuteAsync(sql, entity, tx);
+            if (affectedRows == 0)
                 throw new EntityServiceExceptions("Insert Entity Failed");
-            return entityId ;
+
+            return entity.Id;
 
         }
 
@@ -72,9 +74,20 @@ namespace Entity.Service.Structure.Data.Repositories
                 
         }       
 
-        public Task<bool> UpdateEntityAsync(EntitySgi entity, IDbConnection conn, IDbTransaction tx)
+        public async Task<bool> UpdateEntityAsync(EntitySgi entity, IDbConnection conn, IDbTransaction tx)
         {
-            throw new NotImplementedException();
+            const string sql = @"UPDATE [Entity].[Entities]
+                                 SET
+                                    [EntityType] = COALESCE(@EntityType, [EntityType]
+                                    Displayname = COALESCE(@DisplayName, DisplayName),
+                                    Email = COALESCE(@Email, Email),
+                                    Phone = COALESCE(@Email, Email),
+                                    isActive = COALESCE(@Email, Email),
+                                    UpdatedAt = GETUTCDATE()
+                                 WHERE Id = @Id"; 
+
+            int rows = await conn.ExecuteAsync(sql, entity, tx);
+            return rows > 0;
         }
     }
 }

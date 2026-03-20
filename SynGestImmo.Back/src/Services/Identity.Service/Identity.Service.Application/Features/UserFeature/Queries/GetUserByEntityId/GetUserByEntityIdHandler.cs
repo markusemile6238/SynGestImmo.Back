@@ -6,9 +6,9 @@ using MediatR;
 using Microsoft.Data.SqlClient;
 using Tools.Result;
 
-namespace Identity.Service.Application.Features.UserFeature.Queries.GetUserById
+namespace Identity.Service.Application.Features.UserFeature.Queries.GetUserByEntityId
 {
-    public class GetUserByIdHandler : IRequestHandler<GetUserByIdQuery, CqsResult<User?>>
+    public class GetUserByIdHandler : IRequestHandler<GetUserByEntityIdQuery, CqsResult<User?>>
     {
         private readonly IUserQueryRepository _userQueryRepository;
         private readonly IUserRolesCommandRepository _userRoleCommandRepo;
@@ -22,35 +22,35 @@ namespace Identity.Service.Application.Features.UserFeature.Queries.GetUserById
             _userRoleCommandRepo = userRolesCommandRepository;
         }
 
-        public async Task<CqsResult<User?>> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
+        public async Task<CqsResult<User?>> Handle(GetUserByEntityIdQuery request, CancellationToken cancellationToken)
         {
             // validations
             if(request == null)
                 return CqsResult<User?>.Failure(Error.Validation("Request is require"));
 
 
-            if(request.Id == null)
-                return CqsResult<User?>.Failure(Error.Validation("Id is require"));
+            if(request.EntityId == null)
+                return CqsResult<User?>.Failure(Error.Validation("EntityId is require"));
 
-            Guid userId = new Guid();           
+            Guid entityId = new Guid();           
             
             try
             {
-               userId = Guid.Parse(request.Id);
+               entityId = Guid.Parse(request.EntityId);
             }
             catch
             {
-                return CqsResult<User?>.Failure(Error.Validation("Id not valid"));
+                return CqsResult<User?>.Failure(Error.Validation("EntityId not valid"));
             }
 
             User? user;
 
             try
             {              
-                user = await _userQueryRepository.GetUserByIdAsync(userId);
+                user = await _userQueryRepository.GetUserByEntityIdAsync(entityId);
 
                 if(user is null)
-                    return CqsResult<User?>.Failure(Error.NotFound(request.Id));
+                    return CqsResult<User?>.Failure(Error.NotFound(request.EntityId));
 
                 return CqsResult<User?>.Success(user);
 
